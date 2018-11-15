@@ -30,26 +30,6 @@ int		ft_init(s_window *window, s_inputs *inputs)
 	return (0);
 }
 
-/*int		ft_parse(s_inputs *inputs, char *file)
-{
-	int			count;
-	int			fd;
-	int			ret;
-	int			i;
-
-	if ((fd = open(file, O_RDONLY)) == -1)
-		return (1);
-	count = 0;
-	while ((ret = get_next_line(fd, &(inputs->line))) == 1)
-	{
-		inputs->tabstr = ft_addline(inputs->tabstr, inputs->line, (size_t)count++);
-		ft_strdel(&(inputs->line));
-		//printf("%s\n", inputs->tabstr[count - 1]);
-	}
-	inputs->tab = (int **)malloc(sizeof(int *) * count);
-	return (0);
-}*/
-
 int		ft_parse(s_inputs *inputs, char *file)
 {
 	//gnl - split - nb de cases - malloc tabint - convertir char/int - addinttab -
@@ -94,7 +74,7 @@ int		main(int ac, char **av)
 		return (0);
 	if (ft_parse(&inputs, av[1]))
 		return (0);
-
+	
 	mlx_loop(window.mlx);
 	return (0);
 }

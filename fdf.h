@@ -36,7 +36,8 @@ typedef struct	s_dot
 
 typedef struct	s_vector
 {
-
+	float	dx;
+	float	dy;
 }				s_vector;
 
 typedef struct	s_inputs
@@ -47,6 +48,16 @@ typedef struct	s_inputs
 	int		*tmp;
 	int		**tab;
 }				s_inputs;
+
+typedef struct		s_map
+{
+	s_dot		origin;
+	s_vector	i;
+	s_vector	j;
+	s_vector	k;
+	s_dot		***tabdot;
+	float		zoom;
+}			s_map;
 
 void			ft_put_line(s_window window, s_dot *d1, s_dot *d2, int color);
 

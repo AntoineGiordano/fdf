@@ -10,7 +10,6 @@
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
-
 #include "fdf.h"
 
 int		deal_key(int key)
@@ -19,14 +18,28 @@ int		deal_key(int key)
 	return (0);
 }
 
-int		ft_init(s_window *window, s_inputs *inputs)
+int		ft_init(s_window *win, s_inputs *inputs, s_map map)
 {
-	window->mlx = mlx_init();
-	window->win = mlx_new_window(window->mlx, 1000, 1000, "Test");
+	float dx;
+	float dy;
+
+	dx = 5;
+	dy = 3;
+	win->mlx = mlx_init();
+	win->win = mlx_new_window(win->mlx, 1000, 1000, "Test");
 	inputs->line = ft_strnew(0);
 	inputs->tabstr = NULL;
 	inputs->tmp = NULL;
 	inputs->tab = NULL;
+	map->zoom = 10;
+	map->origin.x = WX / 2;
+	map->origin.y = WY / 2;
+	map->i.dx = map->zoom * dx;
+	map->i.dy = map->zoom * dy;
+	map->j.dx = map->zoom * (-dx);
+	map->j.dy = map->zoom * dy;
+	map->k.dx = map->zoom * 0;
+	map->k.dy = map->zoom * (-ft_sqrt(dx*dx + dy*dy));
 	return (0);
 }
 
@@ -60,26 +73,47 @@ int		ft_parse(s_inputs *inputs, char *file)
 	return (0);
 }
 
+void		set_point(s_window win, s_inputs inputs, s_map map)
+{
+	int	i;
+	int	j;
+	int	nline;
+
+	i = -1;
+	while (inputs->tabstr[++i]);
+	map->tabdot = (s_dot ***)malloc(sizeof(s_dot **) * (i + 1));
+	i = -1;
+	while (inputs->tabstr[++i])
+	{
+		map->tabdot[i] = (s_dot **)malloc(sizeof(s_dot *) * (ft_strlen(inputs->tabstr[i]) + 1));
+		j = -1;
+		while (inputs->tabstr[i][++j])
+		{
+			map->tabdot[i][j] = (s_dot *)malloc(sizeof(s_dot));
+			map->tabdot[i][j].x = ;	
+			map->tabdot[i][j].y = ;
+		}	
+	}
+}
+
 int		main(int ac, char **av)
 {
-	s_window	window;
+	s_window	win;
 	s_inputs	inputs;
-	s_dot		d1;
-	s_dot		d2;
-	char		**tabstr;
+	s_map		map;
 
 	if (ac == 1)
 		ft_putstr("Fichier manquant\n");
-	if (ft_init(&window, &inputs))
+	if (ft_init(&win, &inputs, &map))
 		return (0);
 	if (ft_parse(&inputs, av[1]))
 		return (0);
 	
-	mlx_loop(window.mlx);
+	mlx_loop(win.mlx);
 	return (0);
 }
 
-/*	if (!(d1 = (s_dot *)malloc(sizeof(s_dot))))
+/*	if (!(d1 = (s_dot *)malloc(szeof(s_dot))))
 		return (0);
 	if (!(d2 = (s_dot *)malloc(sizeof(s_dot))))
 		return (0);

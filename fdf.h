@@ -45,6 +45,8 @@ typedef struct	s_inputs
 	int		fd;
 	char	*line;
 	char	**tabstr;
+	int		lenx;
+	int		leny;
 	int		*tmp;
 	int		**tab;
 }				s_inputs;

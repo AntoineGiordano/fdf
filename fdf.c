@@ -18,19 +18,13 @@ int		deal_key(int key)
 	return (0);
 }
 
-int		ft_init(s_window *win, s_inputs *inputs, s_map map)
+void		set_vectors(s_map map)
 {
 	float dx;
 	float dy;
 
 	dx = 5;
 	dy = 3;
-	win->mlx = mlx_init();
-	win->win = mlx_new_window(win->mlx, 1000, 1000, "Test");
-	inputs->line = ft_strnew(0);
-	inputs->tabstr = NULL;
-	inputs->tmp = NULL;
-	inputs->tab = NULL;
 	map->zoom = 10;
 	map->origin.x = WX / 2;
 	map->origin.y = WY / 2;
@@ -40,6 +34,17 @@ int		ft_init(s_window *win, s_inputs *inputs, s_map map)
 	map->j.dy = map->zoom * dy;
 	map->k.dx = map->zoom * 0;
 	map->k.dy = map->zoom * (-ft_sqrt(dx*dx + dy*dy));
+}
+
+int		ft_init(s_window *win, s_inputs *inputs, s_map map)
+{
+	win->mlx = mlx_init();
+	win->win = mlx_new_window(win->mlx, 1000, 1000, "Test");
+	inputs->line = ft_strnew(0);
+	inputs->tabstr = NULL;
+	inputs->tmp = NULL;
+	inputs->tab = NULL;
+	set_vectors(map);	
 	return (0);
 }
 
@@ -70,30 +75,35 @@ int		ft_parse(s_inputs *inputs, char *file)
 		inputs->tab = ft_addinttab(inputs->tab, inputs->tmp, nline);
 		nline++;
 	}
+	inputs->lenx = count;
+	inputs->leny = nline;
 	return (0);
 }
 
-void		set_point(s_window win, s_inputs inputs, s_map map)
+int		set_point(s_window win, s_inputs inputs, s_map map)
 {
 	int	i;
 	int	j;
-	int	nline;
 
-	i = -1;
-	while (inputs->tabstr[++i]);
-	map->tabdot = (s_dot ***)malloc(sizeof(s_dot **) * (i + 1));
+	if (!(map->tabdot = (s_dot ***)malloc(sizeof(s_dot **) * (inputs->leny + 1))))
+		return (1);
+	map->tabdot[inputs->leny] = NULL;
 	i = -1;
 	while (inputs->tabstr[++i])
 	{
-		map->tabdot[i] = (s_dot **)malloc(sizeof(s_dot *) * (ft_strlen(inputs->tabstr[i]) + 1));
+		if (!(map->tabdot[i] = (s_dot **)malloc(sizeof(s_dot *) * (inputs->lenx + 1))))
+			return (1);
+		map->tabdot[inputs->lenx] = NULL;
 		j = -1;
 		while (inputs->tabstr[i][++j])
 		{
-			map->tabdot[i][j] = (s_dot *)malloc(sizeof(s_dot));
-			map->tabdot[i][j].x = ;	
-			map->tabdot[i][j].y = ;
+			if (!(map->tabdot[i][j] = (s_dot *)malloc(sizeof(s_dot))))
+				return (1);
+			map->tabdot[i][j].x = map.zoom * (map.i.x * (j - origin.x) + map.j.x * (i - origin.y));
+			map->tabdot[i][j].y = map.zoom * (map.i.y * (j - origin.x) + map.j.y * (i - origin.y));
 		}	
 	}
+	return (0);
 }
 
 int		main(int ac, char **av)
@@ -107,18 +117,20 @@ int		main(int ac, char **av)
 	if (ft_init(&win, &inputs, &map))
 		return (0);
 	if (ft_parse(&inputs, av[1]))
-		return (0);
+		return (0);	
 	
+	if (intputs.lenx % 2 == 0)//Ternaire ?
+		map.origin.x = inputs.lenx / 2 - 0.5;
+	else
+		map.origin.x = inputs.lenx / 2;
+	if (intputs.leny % 2 == 0)//Ternaire ?
+		map.origin.y = inputs.leny / 2 - 0.5;
+	else
+		map.origin.y = inputs.leny / 2;
+	
+	if (set_point(win, inputs, map))
+		return (0);
+
 	mlx_loop(win.mlx);
 	return (0);
 }
-
-/*	if (!(d1 = (s_dot *)malloc(szeof(s_dot))))
-		return (0);
-	if (!(d2 = (s_dot *)malloc(sizeof(s_dot))))
-		return (0);
-	d1->x = 100;
-	d1->y = 600;
-	d2->x = 980;
-	d2->y = 500;
-	ft_put_line(window, d1, d2, 0x50FF50);*/

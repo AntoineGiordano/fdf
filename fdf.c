@@ -6,10 +6,11 @@
 /*   By: agiordan <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/10 17:21:09 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/11 17:41:52 by agiordan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/11/21 16:38:10 by agiordan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
+
 #include "fdf.h"
 
 int		deal_key(int key)
@@ -18,33 +19,26 @@ int		deal_key(int key)
 	return (0);
 }
 
-void		set_vectors(s_map map)
+int		ft_init(s_window *win, s_inputs *inputs, s_map *map)
 {
 	float dx;
 	float dy;
 
-	dx = 5;
-	dy = 3;
-	map->zoom = 10;
-	map->origin.x = WX / 2;
-	map->origin.y = WY / 2;
-	map->i.dx = map->zoom * dx;
-	map->i.dy = map->zoom * dy;
-	map->j.dx = map->zoom * (-dx);
-	map->j.dy = map->zoom * dy;
-	map->k.dx = map->zoom * 0;
-	map->k.dy = map->zoom * (-ft_sqrt(dx*dx + dy*dy));
-}
-
-int		ft_init(s_window *win, s_inputs *inputs, s_map map)
-{
+	dx = 10;
+	dy = 4;
 	win->mlx = mlx_init();
 	win->win = mlx_new_window(win->mlx, 1000, 1000, "Test");
-	inputs->line = ft_strnew(0);
-	inputs->tabstr = NULL;
-	inputs->tmp = NULL;
-	inputs->tab = NULL;
-	set_vectors(map);	
+	map->zoom = 2.5;
+	map->origin.x = 1000 / 2;
+	map->origin.y = 1000 / 2;
+	map->i.x = map->zoom * dx;
+	map->i.y = map->zoom * dy;
+	map->j.x = map->zoom * (-dx);
+	map->j.y = map->zoom * dy;
+	map->k.x = map->zoom * 0;
+	map->k.y = map->zoom * (-5.8)/*(-ft_sqrt(dx*dx + dy*dy))*/;
+	map->centre.x = inputs->lenx / 2 - ((inputs->lenx % 2) ? 0 : 0.5);
+	map->centre.y = inputs->leny / 2 - ((inputs->leny % 2) ? 0 : 0.5);
 	return (0);
 }
 
@@ -59,6 +53,8 @@ int		ft_parse(s_inputs *inputs, char *file)
 	if ((inputs->fd = open(file, O_RDONLY)) == -1)
 		return (1);
 	if (!(inputs->tab = (int **)malloc(sizeof(int *))))
+		return (1);
+	if (!(inputs->line = ft_strnew(0)))
 		return (1);
 	nline = 0;
 	while ((ret = get_next_line(inputs->fd, &(inputs->line))) == 1)
@@ -80,57 +76,52 @@ int		ft_parse(s_inputs *inputs, char *file)
 	return (0);
 }
 
-int		set_point(s_window win, s_inputs inputs, s_map map)
-{
-	int	i;
-	int	j;
-
-	if (!(map->tabdot = (s_dot ***)malloc(sizeof(s_dot **) * (inputs->leny + 1))))
-		return (1);
-	map->tabdot[inputs->leny] = NULL;
-	i = -1;
-	while (inputs->tabstr[++i])
-	{
-		if (!(map->tabdot[i] = (s_dot **)malloc(sizeof(s_dot *) * (inputs->lenx + 1))))
-			return (1);
-		map->tabdot[inputs->lenx] = NULL;
-		j = -1;
-		while (inputs->tabstr[i][++j])
-		{
-			if (!(map->tabdot[i][j] = (s_dot *)malloc(sizeof(s_dot))))
-				return (1);
-			map->tabdot[i][j].x = map.zoom * (map.i.x * (j - origin.x) + map.j.x * (i - origin.y));
-			map->tabdot[i][j].y = map.zoom * (map.i.y * (j - origin.x) + map.j.y * (i - origin.y));
-		}	
-	}
-	return (0);
-}
-
 int		main(int ac, char **av)
 {
 	s_window	win;
 	s_inputs	inputs;
 	s_map		map;
+	s_par		par;
 
 	if (ac == 1)
 		ft_putstr("Fichier manquant\n");
+
+	if (ft_parse(&inputs, av[1]))
+		return (0);
+	printf("Fin set parse\n");
+
 	if (ft_init(&win, &inputs, &map))
 		return (0);
-	if (ft_parse(&inputs, av[1]))
-		return (0);	
-	
-	if (intputs.lenx % 2 == 0)//Ternaire ?
-		map.origin.x = inputs.lenx / 2 - 0.5;
-	else
-		map.origin.x = inputs.lenx / 2;
-	if (intputs.leny % 2 == 0)//Ternaire ?
-		map.origin.y = inputs.leny / 2 - 0.5;
-	else
-		map.origin.y = inputs.leny / 2;
-	
-	if (set_point(win, inputs, map))
+	printf("Fin set init\n");
+
+	if (set_dots(&win, &inputs, &map))
 		return (0);
+	printf("Fin set point\n");
+
+	print_dots(&win, &inputs, &map);
+	printf("Fin print dot\n");
+
+	/*win.mlx = mlx_init();
+	win.win = mlx_new_window(win.mlx, 1000, 1000, "Test");
+	par.d1.x = 500;
+	par.d1.y = 500;
+	par.d2.x = 600;
+	par.d2.y = 500;
+	par.d3.x = 900;
+	par.d3.y = 900;
+	par.d4.x = 100;
+	par.d4.y = 900;
+	ft_put_par(&win, par, 0x005000);*/
 
 	mlx_loop(win.mlx);
 	return (0);
 }
+
+//Couleur
+//Zoom
+//Translation fleches
+//Options
+//	-	Proportionnalite
+//	-	Taille fenetre
+//	-	Nom fenetre
+//Centres

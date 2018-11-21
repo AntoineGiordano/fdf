@@ -15,7 +15,8 @@ NAME = fdf
 
 SRC =	fdf.c \
 		ft_put_line.c \
-		get_next_line.c
+		get_next_line.c \
+		axes.c
 OBJ = $(SRC:%.c=%.o)
 
 COMPIL = gcc

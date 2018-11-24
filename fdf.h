@@ -6,7 +6,7 @@
 /*   By: agiordan <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/10 17:21:22 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/11 17:45:11 by agiordan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/11/24 22:03:35 by agiordan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -20,7 +20,6 @@
 # include <stdio.h>
 # include "minilibx_macos/mlx.h"
 # include "libft/libft.h"
-# include "get_next_line.h"
 
 typedef struct	s_window
 {

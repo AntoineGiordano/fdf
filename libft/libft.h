@@ -6,17 +6,19 @@
 /*   By: agiordan <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/03 17:31:57 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/15 19:43:11 by agiordan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/11/24 19:49:34 by agiordan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
+# define BUFF_SIZE 5
 
 # include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <fcntl.h>
 
 typedef struct		s_list
 {
@@ -96,6 +98,7 @@ void				ft_sorttab(int *tab, size_t length, int (*f)(int a, int b));
 void				ft_swapint(int *a, int *b);
 void				ft_swapchar(char *a, char *b);
 int					*ft_addint(int *tab, int nbr, size_t length);
-int					**ft_addinttab(int **tab, int *line, size_t length);
+int					ft_sqrt(int nb);
+int					get_next_line(const int fd, char **line);
 
 #endif

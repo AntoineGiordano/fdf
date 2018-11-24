@@ -3,10 +3,10 @@
 #                                                               /              #
 #    Makefile                                         .::    .:/ .      .::    #
 #                                                  +:+:+   +:    +:  +:+:+     #
-#    By: agiordan <marvin@le-101.fr>                +:+   +:    +:    +:+      #
+#    By: mwaterso <mwaterso@student.le-101.fr>      +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/10/03 17:31:01 by agiordan     #+#   ##    ##    #+#        #
-#    Updated: 2018/11/15 17:30:20 by agiordan    ###    #+. /#+    ###.fr      #
+#    Updated: 2018/11/24 19:48:00 by mwaterso    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -81,7 +81,8 @@ FILE =	ft_memset.c \
 		ft_swapint.c \
 		ft_swapchar.c \
 		ft_addint.c \
-		ft_addinttab.c
+		ft_sqrt.c \
+		get_next_line.c
 OBJETS = $(FILE:.c=.o)
 HEADER = libft.h
 FLAGS = -Werror -Wextra -Wall

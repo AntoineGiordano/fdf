@@ -3,15 +3,15 @@
 /*                                                              /             */
 /*   get_next_line.c                                  .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: agiordan <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*   By: mwaterso <mwaterso@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/24 15:51:29 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2018/10/24 15:51:30 by agiordan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/11/24 19:48:33 by agiordan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "libft.h"
 
 static int		ft_findn(char *str)
 {
@@ -27,8 +27,6 @@ static t_list	*ft_checkfd(t_list *first, int fd)
 {
 	t_list *file;
 
-	if (fd < 0)
-		return (NULL);
 	file = first;
 	while (file)
 	{
@@ -68,11 +66,11 @@ int				get_next_line(const int fd, char **line)
 	int				ret;
 	char			*tmp;
 
+	if (fd < 0 || BUFF_SIZE < 0 || read(fd, buff, 0) == -1 || !line)
+		return (-1);
 	if (!first)
 		first = ft_lstnew("\0", fd);
-	if (fd < 0 || !(file = ft_checkfd(first, fd)) ||
-	read(fd, buff, 0) == -1 || !line)
-		return (-1);
+	file = ft_checkfd(first, fd);
 	while (!ft_strchr(file->content, '\n') &&
 		(ret = read(file->content_size, buff, BUFF_SIZE)) > 0)
 	{

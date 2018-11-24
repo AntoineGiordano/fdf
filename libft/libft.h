@@ -6,7 +6,7 @@
 /*   By: agiordan <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/03 17:31:57 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/24 19:49:34 by agiordan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/11/24 22:11:50 by agiordan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -99,6 +99,7 @@ void				ft_swapint(int *a, int *b);
 void				ft_swapchar(char *a, char *b);
 int					*ft_addint(int *tab, int nbr, size_t length);
 int					ft_sqrt(int nb);
+int					**ft_addinttab(int **tab, int *line, size_t length);
 int					get_next_line(const int fd, char **line);
 
 #endif

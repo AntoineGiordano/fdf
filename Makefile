@@ -6,7 +6,7 @@
 #    By: agiordan <marvin@le-101.fr>                +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/11/10 17:21:00 by agiordan     #+#   ##    ##    #+#        #
-#    Updated: 2018/11/13 19:17:30 by agiordan    ###    #+. /#+    ###.fr      #
+#    Updated: 2018/11/24 22:09:33 by agiordan    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -15,7 +15,6 @@ NAME = fdf
 
 SRC =	fdf.c \
 		ft_put_line.c \
-		get_next_line.c \
 		axes.c
 OBJ = $(SRC:%.c=%.o)
 

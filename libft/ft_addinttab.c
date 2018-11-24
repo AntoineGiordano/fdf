@@ -6,10 +6,12 @@
 /*   By: agiordan <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/14 20:16:36 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/15 17:12:08 by agiordan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/11/24 22:15:49 by agiordan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 int		**ft_addinttab(int **tab, int *line, size_t length)
 {

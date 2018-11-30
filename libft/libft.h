@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   libft.h                                          .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: agiordan <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*   By: mwaterso <mwaterso@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/03 17:31:57 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/24 22:11:50 by agiordan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/11/25 13:38:14 by mwaterso    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -85,8 +85,8 @@ void				ft_putnbr_fd(int n, int fd);
 t_list				*ft_lstnew(void const *content, size_t content_size);
 void				ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
 void				ft_lstdel(t_list **alst, void (*del)(void *, size_t));
-void				ft_lstadd(t_list **alst, t_list *new);
-void				ft_lstaddback(t_list **alst, t_list *new);
+void				ft_lstadd(t_list **alst, t_list *newelem);
+void				ft_lstaddback(t_list **alst, t_list *newelem);
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 
@@ -98,8 +98,9 @@ void				ft_sorttab(int *tab, size_t length, int (*f)(int a, int b));
 void				ft_swapint(int *a, int *b);
 void				ft_swapchar(char *a, char *b);
 int					*ft_addint(int *tab, int nbr, size_t length);
+int                 **ft_addinttab(int **tab, int *line, size_t length);
 int					ft_sqrt(int nb);
-int					**ft_addinttab(int **tab, int *line, size_t length);
 int					get_next_line(const int fd, char **line);
+void				ft_strfill(void *s, int c, size_t n);
 
 #endif

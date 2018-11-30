@@ -1,34 +1,26 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_addinttab.c                                   .::    .:/ .      .::   */
+/*   ft_strfill.c                                     .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: mwaterso <mwaterso@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/11/14 20:16:36 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/25 12:36:11 by mwaterso    ###    #+. /#+    ###.fr     */
+/*   Created: 2018/11/25 13:31:56 by mwaterso     #+#   ##    ##    #+#       */
+/*   Updated: 2018/11/25 13:39:17 by mwaterso    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		**ft_addinttab(int **tab, int *line, size_t length)
+void	ft_strfill(void *s, int c, size_t n)
 {
-	int		**newtab;
-	size_t	i;
+	size_t i;
 
-	newtab = (int **)malloc(sizeof(int *) * (length + 1));
 	i = 0;
-	while (i < length)
+	while (i < n)
 	{
-		newtab[i] = tab[i];
-		//free(tab + i);
-		tab[i] = NULL;
+		((char *)s)[i] = c;
 		i++;
 	}
-	/*if (tab)
-		free(&tab);*/
-	newtab[i] = line;
-	return (newtab);
 }

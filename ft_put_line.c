@@ -21,9 +21,9 @@ float	ft_abs(float x)
 		return (-x);
 }
 
-void	ft_put_line(s_window *win, s_dot *d1, s_dot *d2, int color)
+void	ft_put_line(t_window *win, t_dot *d1, t_dot *d2, int color)
 {
-	s_vector	pas;
+	t_vector	pas;
 	int			nbpixels;
 	int			i;
 
@@ -44,12 +44,14 @@ void	ft_put_line(s_window *win, s_dot *d1, s_dot *d2, int color)
 		pas.y /= ft_abs(pas.y);
 	}
 	i = -1;
-	while (i++ < nbpixels)
+	while (++i < nbpixels)
+	{
 		mlx_pixel_put(win->mlx, win->win,
 		d1->x + pas.x * i, d1->y + pas.y * i, color);
+	}
 }
 
-void	set_pas(s_dot d2, s_dot d3, s_vector *pas, int *nbpixels)
+void	set_pas(t_dot d2, t_dot d3, t_vector *pas, int *nbpixels)
 {
 	pas->x = d3.x - d2.x;
 	pas->y = d3.y - d2.y;
@@ -67,11 +69,11 @@ void	set_pas(s_dot d2, s_dot d3, s_vector *pas, int *nbpixels)
 	}
 }
 
-void	ft_put_par(s_window *win, s_par par, int color)
+void	ft_put_par(t_window *win, t_par par, int color)
 {
-	s_dot		tmp;
-	s_vector	pas;
-	s_vector	line;
+	t_dot		tmp;
+	t_vector	pas;
+	t_vector	line;
 	int			nbpixels;
 	int			i;
 

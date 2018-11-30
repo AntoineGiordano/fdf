@@ -13,13 +13,13 @@
 
 #include "fdf.h"
 
-int		set_dots(s_window *win, s_inputs *inputs, s_map *map)
+int		set_dots(t_window *win, t_inputs *inputs, t_map *map)
 {
 	int	i;
 	int	j;
 
 	printf("Debut\n");
-	if (!(map->tabdot = (s_dot ***)malloc(sizeof(s_dot **) * (inputs->leny + 1))))
+	if (!(map->tabdot = (t_dot ***)malloc(sizeof(t_dot **) * (inputs->leny + 1))))
 		return (1);
 	printf("Fin malloc\n");
 	map->tabdot[inputs->leny] = NULL;
@@ -27,7 +27,7 @@ int		set_dots(s_window *win, s_inputs *inputs, s_map *map)
 	while (++i < inputs->leny)
 	{
 		printf("New line\n");
-		if (!(map->tabdot[i] = (s_dot **)malloc(sizeof(s_dot *) * (inputs->lenx + 1))))
+		if (!(map->tabdot[i] = (t_dot **)malloc(sizeof(t_dot *) * (inputs->lenx + 1))))
 			return (1);
 		printf("Fin malloc 2\n");
 		map->tabdot[inputs->lenx] = NULL;
@@ -35,7 +35,7 @@ int		set_dots(s_window *win, s_inputs *inputs, s_map *map)
 		while (++j < inputs->lenx)
 		{
 			printf("New point\n");
-			if (!(map->tabdot[i][j] = (s_dot *)malloc(sizeof(s_dot))))
+			if (!(map->tabdot[i][j] = (t_dot *)malloc(sizeof(t_dot))))
 				return (1);
 			/*printf("Fin malloc 3 :\n");
 			printf("%f\n", map->zoom);
@@ -53,13 +53,12 @@ int		set_dots(s_window *win, s_inputs *inputs, s_map *map)
 	return (0);
 }
 
-void	print_dots(s_window *win, s_inputs *inputs, s_map *map)
+void	print_dots(t_window *win, t_inputs *inputs, t_map *map)
 {
 	int		j;
 	int		i;
-	s_par	par;
+	t_par	par;
 
-	printf("len y = %i\nlen x = %i\n", inputs->leny, inputs->lenx);
 	i = -1;
 	while (++i < inputs->leny)
 	{
@@ -80,9 +79,9 @@ void	print_dots(s_window *win, s_inputs *inputs, s_map *map)
 	}
 }
 
-s_par	set_par(s_dot *d1, s_dot *d2, s_dot *d3, s_dot *d4)
+t_par	set_par(t_dot *d1, t_dot *d2, t_dot *d3, t_dot *d4)
 {
-	s_par	par;
+	t_par	par;
 
 	par.d1.x = d1->x;
 	par.d1.y = d1->y;

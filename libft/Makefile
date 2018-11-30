@@ -6,7 +6,7 @@
 #    By: mwaterso <mwaterso@student.le-101.fr>      +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/10/03 17:31:01 by agiordan     #+#   ##    ##    #+#        #
-#    Updated: 2018/11/24 22:14:53 by agiordan    ###    #+. /#+    ###.fr      #
+#    Updated: 2018/11/30 17:33:03 by agiordan    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -83,7 +83,8 @@ FILE =	ft_memset.c \
 		ft_addint.c \
 		ft_addinttab.c \
 		ft_sqrt.c \
-		get_next_line.c
+		get_next_line.c \
+		ft_strfill.c
 OBJETS = $(FILE:.c=.o)
 HEADER = libft.h
 FLAGS = -Werror -Wextra -Wall

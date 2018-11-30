@@ -6,7 +6,7 @@
 #    By: agiordan <marvin@le-101.fr>                +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/11/10 17:21:00 by agiordan     #+#   ##    ##    #+#        #
-#    Updated: 2018/11/24 22:09:33 by agiordan    ###    #+. /#+    ###.fr      #
+#    Updated: 2018/11/25 04:58:35 by agiordan    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -15,11 +15,12 @@ NAME = fdf
 
 SRC =	fdf.c \
 		ft_put_line.c \
-		axes.c
+		axes.c \
+		hook.c
 OBJ = $(SRC:%.c=%.o)
 
 COMPIL = gcc
-FLAG = -Wall -Werror -Wextra
+FLAG = -Wall -Werror -Wextra -g
 
 LIBFT = libft
 MLX = minilibx_macos
@@ -36,12 +37,12 @@ $(NAME): $(OBJ)
 		$(COMPIL) $(FLAG) $(OBJ) $(FRAMEWORK) $(INCLUDE) -o $(NAME)
 
 clean:
-		rm -f $(NAME) $(OBJ)
+		rm -f $(OBJ)
 		make clean -C $(LIBFT)
 		make clean -C $(MLX)
 
 fclean: clean
-		@echo ""
+		rm -f $(NAME)
 		make fclean -C $(LIBFT)
 		make fclean -C $(MLX)
 

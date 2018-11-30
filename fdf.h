@@ -21,59 +21,65 @@
 # include "minilibx_macos/mlx.h"
 # include "libft/libft.h"
 
+typedef struct	s_dot
+{
+	float		x;
+	float		y;
+}				t_dot;
+
+typedef struct	s_par
+{
+	t_dot		d1;
+	t_dot		d2;
+	t_dot		d3;
+	t_dot		d4;
+}				t_par;
+
+typedef struct	s_vector
+{
+	float	    x;
+	float	    y;
+}				t_vector;
+
+typedef struct	s_inputs
+{
+	int		    fd;
+	char	    *line;
+	char	    **tabstr;
+	int		    lenx;
+	int		    leny;
+	int		    *tmp;
+	int		    **tab;
+}				t_inputs;
+
+typedef struct	s_map
+{
+	t_dot		origin;
+	t_dot		centre;
+	t_vector	i;
+	t_vector	j;
+	t_vector	k;
+	t_dot		***tabdot;
+	float		zoom;
+}			    t_map;
+
 typedef struct	s_window
 {
     void		*mlx;
     void		*win;
 	int			width;
 	int			height;
-}				s_window;
+	char		*name;
+	t_map		*map;
+	t_inputs	*inputs;
+}				t_window;
 
-typedef struct	s_dot
-{
-	float		x;
-	float		y;
-}				s_dot;
+void			ft_put_line(t_window *window, t_dot *d1, t_dot *d2, int color);
+void			ft_put_par(t_window *win, t_par par, int color);
+int				set_dots(t_window *win, t_inputs *inputs, t_map *map);
+void			print_dots(t_window *win, t_inputs *inputs, t_map *map);
+t_par			set_par(t_dot *d1, t_dot *d2, t_dot *d3, t_dot *d4);
+int				key_hook(int keycode, t_window *win);
+int     		mouse_hook(int button, int x, int y, t_window *win);
 
-typedef struct	s_par
-{
-	s_dot		d1;
-	s_dot		d2;
-	s_dot		d3;
-	s_dot		d4;
-}				s_par;
-
-typedef struct	s_vector
-{
-	float	x;
-	float	y;
-}				s_vector;
-
-typedef struct	s_inputs
-{
-	int		fd;
-	char	*line;
-	char	**tabstr;
-	int		lenx;
-	int		leny;
-	int		*tmp;
-	int		**tab;
-}				s_inputs;
-
-typedef struct		s_map
-{
-	s_dot		origin;
-	s_dot		centre;
-	s_vector	i;
-	s_vector	j;
-	s_vector	k;
-	s_dot		***tabdot;
-	float		zoom;
-}			s_map;
-
-void			ft_put_line(s_window *window, s_dot *d1, s_dot *d2, int color);
-void			ft_put_par(s_window *win, s_par par, int color);
-int				set_dots(s_window *win, s_inputs *inputs, s_map *map);
-void			print_dots(s_window *win, s_inputs *inputs, s_map *map);
-s_par			set_par(s_dot *d1, s_dot *d2, s_dot *d3, s_dot *d4);
 #endif

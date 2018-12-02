@@ -6,7 +6,7 @@
 /*   By: mwaterso <mwaterso@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/14 20:16:36 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/25 12:36:11 by mwaterso    ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/11/30 17:43:55 by agiordan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -23,12 +23,9 @@ int		**ft_addinttab(int **tab, int *line, size_t length)
 	while (i < length)
 	{
 		newtab[i] = tab[i];
-		//free(tab + i);
 		tab[i] = NULL;
 		i++;
 	}
-	/*if (tab)
-		free(&tab);*/
 	newtab[i] = line;
 	return (newtab);
 }

@@ -81,5 +81,7 @@ void			print_dots(t_window *win, t_inputs *inputs, t_map *map);
 t_par			set_par(t_dot *d1, t_dot *d2, t_dot *d3, t_dot *d4);
 int				key_hook(int keycode, t_window *win);
 int     		mouse_hook(int button, int x, int y, t_window *win);
+void			ft_refresh(t_window *win);
+void			reset_dots(t_window *win, t_inputs *inputs, t_map *map);
 
 #endif

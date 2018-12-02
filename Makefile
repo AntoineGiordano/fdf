@@ -15,7 +15,7 @@ NAME = fdf
 
 SRC =	fdf.c \
 		ft_put_line.c \
-		axes.c \
+		draw.c \
 		hook.c
 OBJ = $(SRC:%.c=%.o)
 

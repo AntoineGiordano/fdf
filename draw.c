@@ -81,7 +81,7 @@ void	print_dots(t_window *win, t_inputs *inputs, t_map *map)
 		{
 			x = map->tabdot[i][j]->x;
 			y = map->tabdot[i][j]->y;
-			printf("x = %f\ny = %f\n\n", map->tabdot[i][j]->x, map->tabdot[i][j]->y);
+			//printf("x = %f\ny = %f\n\n", map->tabdot[i][j]->x, map->tabdot[i][j]->y);
 			if (j + 1 < inputs->lenx)
 				if (!((x < 0 || x > win->width || y < 0 || y > win->height) &&
 				(map->tabdot[i][j + 1]->x < 0 ||
@@ -98,6 +98,32 @@ void	print_dots(t_window *win, t_inputs *inputs, t_map *map)
 					ft_put_line(win, map->tabdot[i][j], map->tabdot[i + 1][j], 0x00FF00);
 		}
 	}
+	ft_print_bordure(win);
+	mlx_string_put(win->mlx, win->win, win->width / 2, win->height / 10 / 2, 0xBB0000, win->name);
+}
+
+void	ft_print_bordure(t_window *win)
+{
+	t_par	bordure;
+
+	bordure.d1.x = 0;
+	bordure.d1.y = 0;
+	bordure.d2.x = win->width;
+	bordure.d2.y = 0;
+	bordure.d3.x = win->width;
+	bordure.d3.y = win->height / 10;
+	bordure.d4.x = 0;
+	bordure.d4.y = win->height / 10;
+	ft_put_par(win, bordure, 0x50BB50);
+	bordure.d1.x = 0;
+	bordure.d1.y = 9 * win->height / 10;
+	bordure.d2.x = win->width;
+	bordure.d2.y = 9 * win->height / 10;
+	bordure.d3.x = win->width;
+	bordure.d3.y = win->height;
+	bordure.d4.x = 0;
+	bordure.d4.y = win->height;
+	ft_put_par(win, bordure, 0x50BB50);
 }
 
 t_par	set_par(t_dot *d1, t_dot *d2, t_dot *d3, t_dot *d4)

@@ -61,19 +61,18 @@ int		ft_init(t_window *win, t_map *map)
 	map->zoom = 1.5;
 	map->origin.x = win->width / 2;
 	map->origin.y = win->height / 2;
-	/*map->i.x = map->zoom * dx;
+	map->i.x = map->zoom * dx;
 	map->i.y = map->zoom * dy;
 	map->j.x = map->zoom * (-dx);
 	map->j.y = map->zoom * dy;
 	map->k.x = map->zoom * 0;
-	map->k.y = map->zoom * (-5.8); //-5.8*/
-	map->i.x = map->zoom * 10;
+	map->k.y = map->zoom * (-5.8); 
+	/*map->i.x = map->zoom * 10;
 	map->i.y = map->zoom * 0;
 	map->j.x = map->zoom * 0;
-	map->j.y = map->zoom * 10;
+	map->j.y = map->zoom * 0;
 	map->k.x = map->zoom * 0;
-	map->k.y = map->zoom * 0;
-
+	map->k.y = map->zoom * (-10);*/
 	map->tabdot = NULL;
 	map->centre.x = win->inputs->lenx / 2 - ((win->inputs->lenx % 2) ? 0 : 0.5);
 	map->centre.y = win->inputs->leny / 2 - ((win->inputs->leny % 2) ? 0 : 0.5);
@@ -110,12 +109,12 @@ int		ft_parse(t_window *win, char *file)
 		while (++j < count)
 			win->inputs->tmp[j] = ft_atoi(win->inputs->tabstr[j]);
 		win->inputs->tab = ft_addinttab(win->inputs->tab, win->inputs->tmp, nline);
-        printf("Apres addinttab\n");
+        //printf("Apres addinttab\n");
 		nline++;
 	}
 	win->inputs->lenx = count;
 	win->inputs->leny = nline;
-	printf("Leny : %i\n", win->inputs->leny);
+	//printf("Leny : %i\n", win->inputs->leny);
 	return (0);
 }
 
@@ -141,6 +140,9 @@ int		main(int ac, char **av)
 	printf("Fin set init\n");
 
 	ft_refresh(&win);
+	ft_print_bordure(&win);
+	mlx_string_put(win.mlx, win.win, win.width / 2 - (10 * ft_strlen(win.name) / 2),
+	win.height / 10 / 2 - 12, 0xBB0000, win.name);
 
 	mlx_mouse_hook(win.win, &mouse_hook, &win);
 	mlx_key_hook(win.win, &key_hook, &win);

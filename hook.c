@@ -34,13 +34,13 @@ int		key_hook(int keycode, t_window *win)
 		exit(EXIT_SUCCESS);
 	}
 	else if (keycode == 124)
-        win->map->origin.x += 15;
-    else if (keycode == 123)
         win->map->origin.x -= 15;
+    else if (keycode == 123)
+        win->map->origin.x += 15;
     else if (keycode == 125)
-        win->map->origin.y += 15;
-    else if (keycode == 126)
         win->map->origin.y -= 15;
+    else if (keycode == 126)
+        win->map->origin.y += 15;
 	if (keycode >= 123 && keycode <= 126)
 		ft_refresh(win);
 	return (0);
@@ -49,9 +49,9 @@ int		key_hook(int keycode, t_window *win)
 int     mouse_hook(int button, int x, int y, t_window *win)
 {
     if (button == 4)
-		win->map->zoom += 0.06;
+		win->map->zoom -= 0.06;
     else if (button == 5)
-        win->map->zoom -= 0.06;
+        win->map->zoom += 0.06;
 	if (win->map->zoom < 0)
 		win->map->zoom = 0;
 	if (button == 4 || button == 5)

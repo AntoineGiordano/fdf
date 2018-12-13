@@ -83,5 +83,6 @@ int				key_hook(int keycode, t_window *win);
 int     		mouse_hook(int button, int x, int y, t_window *win);
 void			ft_refresh(t_window *win);
 void			reset_dots(t_window *win, t_inputs *inputs, t_map *map);
+void			ft_print_bordure(t_window *win);
 
 #endif

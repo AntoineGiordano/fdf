@@ -92,7 +92,7 @@ FLAGS = -Werror -Wextra -Wall
 all: $(NAME)
 
 $(NAME):	$(OBJETS)
-			gcc $(FLAGS) -c $(FILE) -I $(HEADER)
+			gcc $(FLAGS) -c $(FILE)
 			ar rc $(NAME) $(OBJETS)
 			ranlib $(NAME)
 

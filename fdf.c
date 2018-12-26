@@ -123,13 +123,17 @@ int		main(int ac, char **av)
 	t_window	win;
 	t_map		map;
 	t_inputs	inputs;
-	int			ifile;
+	int		ifile;
 	
 	win.inputs = &inputs;
 	win.map = &map;
 	
 	ifile = ft_params(&win, ac, av);
 	printf("Fin check params\n");
+	
+	mlx_mouse_hook(win.win, &mouse_hook, &win);
+	mlx_key_hook(win.win, &key_hook, &win);
+	mlx_loop(win.mlx);
 
 	if (ft_parse(&win, av[ifile]))
 		return (0);

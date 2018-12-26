@@ -26,7 +26,7 @@ char	**ft_addline(char **tab, char *line, size_t length)
 		ft_strdel(&(tab[i]));
 	}
 	if (!tab)
-		free(&tab);
+		free(tab);
 	newtab[i] = ft_strdup(line);
 	ft_strdel(&line);
 	return (newtab);

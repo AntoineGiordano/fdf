@@ -37,10 +37,9 @@ int		ft_params(t_window *win, int ac, char **av)
 		else if (!ft_strcmp(av[i], "-len"))
 		{
 			if (i + 1 < ac)
-				win->width = ft_atoi(av[i + 1]);
-			if (i + 2 < ac)
-				win->height = ft_atoi(av[i + 2]);
-			i += 2;
+				win->width = ft_atoi(av[i++ + 1]);
+			if (i + 1 < ac)
+				win->height = ft_atoi(av[i++ + 2]);
 		}
 		else
 			ifile = i;
@@ -78,6 +77,12 @@ int		ft_init(t_window *win, t_map *map)
 	map->centre.y = win->inputs->leny / 2 - ((win->inputs->leny % 2) ? 0 : 0.5);
 	return (0);
 }
+void		ft_get_colors(t_window *win, char *point, int i, int j)
+{//Bien malloc tou ca
+	if (ft_strlen(point) != ft_nbrlen(ft_atoi(point)))
+		win->inputs->colors[i][j] = ft_atoi_base(
+		ft_strsub(point, 3, 8), 16);
+}
 
 int		ft_parse(t_window *win, char *file)
 {
@@ -91,23 +96,28 @@ int		ft_parse(t_window *win, char *file)
 		return (1);
 	if (!(win->inputs->tab = (int **)malloc(sizeof(int *))))
 		return (1);
-	win->inputs->tab = NULL;
-	if (!(win->inputs->line = ft_strnew(0)))
+	if (!(win->inputs->colors = (int **)malloc(sizeof(int *))))
 		return (1);
+	//win->inputs->tab = NULL;
+	/*if (!(win->inputs->line = ft_strnew(0)))
+		return (1);*/
 	printf("Fin malloc tab & line\n");
 	nline = 0;
 	ret = 1;
 	while ((ret = get_next_line(win->inputs->fd, &(win->inputs->line))) == 1)
 	{
 		win->inputs->tabstr = ft_strsplit(win->inputs->line, ' ');
-		count = 0;
-		while (win->inputs->tabstr[count])
-			count++;
+		/*count = -1;
+		while (win->inputs->tabstr[++count]);*/
+		count = ft_tablen(win->inputs->tabstr);
 		if (!(win->inputs->tmp = (int *)malloc(sizeof(int) * count)))
 			return (1);
 		j = -1;
 		while (++j < count)
+		{
 			win->inputs->tmp[j] = ft_atoi(win->inputs->tabstr[j]);
+			ft_get_colors(win, win->inputs->tabstr, j);
+		}
 		win->inputs->tab = ft_addinttab(win->inputs->tab, win->inputs->tmp, nline);
         //printf("Apres addinttab\n");
 		nline++;
@@ -138,27 +148,24 @@ int		main(int ac, char **av)
 	if (ft_parse(&win, av[ifile]))
 		return (0);
 	printf("Fin set parse\n");
-
 	if (ft_init(&win, win.map))
 		return (0);
 	printf("Fin set init\n");
 
 	ft_refresh(&win);
-	ft_print_bordure(&win);
-	mlx_string_put(win.mlx, win.win, win.width / 2 - (10 * ft_strlen(win.name) / 2),
-	win.height / 10 / 2 - 12, 0xBB0000, win.name);
-
+	//ft_print_bordure(&win);
 	mlx_mouse_hook(win.win, &mouse_hook, &win);
 	mlx_key_hook(win.win, &key_hook, &win);
 	mlx_loop(win.mlx);
 	return (0);
 }
 
-//Couleur
+//ATTENTION FICHIERS INVALIDE
+
+//Couleur ?
 //Zoom
 //Translation fleches
 //Options
-//	-	Proportionnalite (useless)
 //	-	Taille fenetre
 //	-	Nom fenetre
 //Centres

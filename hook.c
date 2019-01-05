@@ -81,7 +81,7 @@ void	ft_parallele_z(t_window *win, int sign)
 
 void	ft_parallele(t_window *win)
 {
-/*	if (keycode == )
+	/*if (keycode == )
 		ft_parallele_x(win, -1);	
 	else if (keycode == )
 		ft_parallele_x(win, 1);	
@@ -104,6 +104,9 @@ void	ft_refresh(t_window *win)
 
 	mlx_clear_window(win->mlx, win->win);
 	print_dots(win, win->inputs, win->map);
+	mlx_string_put(win->mlx, win->win, \
+	win->width / 2 - (10 * ft_strlen(win->name) / 2), \
+	win->height / 10 / 2 - 12, 0xBB0000, win->name);
 	printf("Fin print dot\n");
 }
 
@@ -131,7 +134,7 @@ int	key_hook(int keycode, t_window *win)
 int     mouse_hook(int button, int x, int y, t_window *win)
 {
     if (button == 4)
-		win->map->zoom -= 0.06;
+	win->map->zoom -= 0.06;
     else if (button == 5)
         win->map->zoom += 0.06;
 	if (win->map->zoom < 0)

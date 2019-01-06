@@ -43,14 +43,18 @@ typedef struct	s_vector
 
 typedef struct	s_inputs
 {
-	int		    fd;
-	char	    *line;
-	char		**tabstr;
-	int	**colors;	
+	int	fd;
+	char	*line;
+	char	**tabstr;
+	
+	char	***colors;	
+	char	**tmpcolors;
+
+	int	**tab;
+	int	*tmp;
+
 	int	lenx;
 	int	leny;
-	int	*tmp;
-	int	**tab;
 }				t_inputs;
 
 typedef struct	s_map

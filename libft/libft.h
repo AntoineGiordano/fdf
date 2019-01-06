@@ -105,5 +105,6 @@ void				ft_strfill(void *s, int c, size_t n);
 int				ft_tablen(char **tab);
 char				**ft_tabnew(size_t nline, size_t lline);
 void				ft_tabdel(char ***tab);
+int				ft_atoi_base(const char *str, int base);
 
 #endif

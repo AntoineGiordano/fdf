@@ -87,7 +87,8 @@ FILE =	ft_memset.c \
 		ft_strfill.c \
 		ft_tablen.c \
 		ft_tabnew.c \
-		ft_tabdel.c
+		ft_tabdel.c \
+		ft_atoi_base.c
 OBJETS = $(FILE:.c=.o)
 HEADER = libft.h
 FLAGS = -Werror -Wextra -Wall -c

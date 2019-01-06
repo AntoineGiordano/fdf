@@ -77,12 +77,6 @@ int		ft_init(t_window *win, t_map *map)
 	map->centre.y = win->inputs->leny / 2 - ((win->inputs->leny % 2) ? 0 : 0.5);
 	return (0);
 }
-void		ft_get_colors(t_window *win, char *point, int i, int j)
-{//Bien malloc tou ca
-	if (ft_strlen(point) != ft_nbrlen(ft_atoi(point)))
-		win->inputs->colors[i][j] = ft_atoi_base(
-		ft_strsub(point, 3, 8), 16);
-}
 
 int		ft_parse(t_window *win, char *file)
 {
@@ -91,12 +85,13 @@ int		ft_parse(t_window *win, char *file)
 	int		ret;
 	int		j;
 	int		nline;
+	char		*info;
 
 	if ((win->inputs->fd = open(file, O_RDONLY)) == -1)
 		return (1);
 	if (!(win->inputs->tab = (int **)malloc(sizeof(int *))))
 		return (1);
-	if (!(win->inputs->colors = (int **)malloc(sizeof(int *))))
+	if (!(win->inputs->colors = (char ***)malloc(sizeof(char ***))))
 		return (1);
 	//win->inputs->tab = NULL;
 	/*if (!(win->inputs->line = ft_strnew(0)))
@@ -107,18 +102,24 @@ int		ft_parse(t_window *win, char *file)
 	while ((ret = get_next_line(win->inputs->fd, &(win->inputs->line))) == 1)
 	{
 		win->inputs->tabstr = ft_strsplit(win->inputs->line, ' ');
-		/*count = -1;
-		while (win->inputs->tabstr[++count]);*/
 		count = ft_tablen(win->inputs->tabstr);
-		if (!(win->inputs->tmp = (int *)malloc(sizeof(int) * count)))
+		if (!(win->inputs->tmptab = (int *)malloc(sizeof(int) * count)))
 			return (1);
+		if (!(win->inputs->tmpcolors = (char **)malloc(sizeof(char*) * count)))
+			return (1);
+		//ft_filltabint(&(win->inputs->tmp), count, ft_atoi_base("50BB50", 16));
+		//win->inputs->colors = ft_addinttab(won->inputs->colors, win->inputs->tmp, nline);
 		j = -1;
 		while (++j < count)
 		{
-			win->inputs->tmp[j] = ft_atoi(win->inputs->tabstr[j]);
-			ft_get_colors(win, win->inputs->tabstr, j);
+			info = win->inputs->tabstr[j];
+			win->inputs->tmptab[j] = ft_atoi(info);
+
+			if (ft_strlen(info) != ft_nbrlen(ft_atoi(info)))
+				win->inputs->tmpcolors[j] = ft_strsub(info, ft_nbrlen(ft_atoi(info)) + 3, ft_strlen(info) - ft_nbrlen(ft_atoi(info)) - 3);
+			win->inputs->colors = ft_addlinetab(win->inputs->colors, win->inputs->tmpcolors);
 		}
-		win->inputs->tab = ft_addinttab(win->inputs->tab, win->inputs->tmp, nline);
+		win->inputs->tab = ft_addinttab(win->inputs->tab, win->inputs->tmptab, nline);
         //printf("Apres addinttab\n");
 		nline++;
 	}

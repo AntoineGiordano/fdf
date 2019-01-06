@@ -15,7 +15,7 @@
 
 int		**ft_addinttab(int **tab, int *line, size_t length)
 {
-	int	**newtab;
+	int		**newtab;
 	size_t	i;
 
 	newtab = (int **)malloc(sizeof(int *) * (length + 1));

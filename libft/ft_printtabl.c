@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_addinttab.c                                   .::    .:/ .      .::   */
+/*   ft_printtabl.c                                   .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: agiordan <mwaterso@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: agiordan <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/11/14 20:16:36 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2019/01/07 14:30:52 by agiordan    ###    #+. /#+    ###.fr     */
+/*   Created: 2018/11/13 18:56:42 by agiordan     #+#   ##    ##    #+#       */
+/*   Updated: 2018/11/13 19:15:36 by agiordan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		**ft_addinttab(int **tab, int *line, size_t length)
+void	ft_printtabl(char **tab)
 {
-	int		**newtab;
-	size_t	i;
+	int	i;
+	int	len;
 
-	newtab = (int **)malloc(sizeof(int *) * (length + 1));
-	i = 0;
-	while (i < length)
-	{
-		newtab[i] = tab[i];
-		tab[i] = NULL;
-		i++;
-	}
-	newtab[i] = line;
-	return (newtab);
+	len = ft_tablen(tab);
+	i = -1;
+	while (++i < len)
+		ft_putendl(tab[i]);
+	ft_putchar('\n');
 }

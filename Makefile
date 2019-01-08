@@ -16,7 +16,8 @@ NAME = fdf
 SRC =	fdf.c \
 		ft_put_line.c \
 		draw.c \
-		hook.c
+		hook.c \
+		parallele.c
 OBJ = $(SRC:%.c=%.o)
 
 COMPIL = gcc

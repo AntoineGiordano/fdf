@@ -60,7 +60,6 @@ FILE =	ft_memset.c \
 		ft_putchar.c \
 		ft_putstr.c \
 		ft_putendl.c \
-		ft_printtab.c \
 		ft_putnbr.c \
 		ft_putchar_fd.c \
 		ft_putstr_fd.c \
@@ -85,10 +84,14 @@ FILE =	ft_memset.c \
 		ft_sqrt.c \
 		get_next_line.c \
 		ft_strfill.c \
+		ft_atoi_base.c \
 		ft_tablen.c \
 		ft_tabnew.c \
 		ft_tabdel.c \
-		ft_atoi_base.c
+		ft_tabcpy.c \
+		ft_tabdup.c \
+		ft_printtab.c \
+		ft_printtabl.c
 OBJETS = $(FILE:.c=.o)
 HEADER = libft.h
 FLAGS = -Werror -Wextra -Wall -c

@@ -1,31 +1,32 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_addinttab.c                                   .::    .:/ .      .::   */
+/*   ft_tabdup.c                                      .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: agiordan <mwaterso@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: agiordan <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/11/14 20:16:36 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2019/01/07 14:30:52 by agiordan    ###    #+. /#+    ###.fr     */
+/*   Created: 2019/01/07 14:48:04 by agiordan     #+#   ##    ##    #+#       */
+/*   Updated: 2019/01/07 14:48:06 by agiordan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		**ft_addinttab(int **tab, int *line, size_t length)
+char	**ft_tabdup(char **tab)
 {
-	int		**newtab;
+	char	**newtab;
+	size_t	len;
 	size_t	i;
 
-	newtab = (int **)malloc(sizeof(int *) * (length + 1));
-	i = 0;
-	while (i < length)
-	{
-		newtab[i] = tab[i];
-		tab[i] = NULL;
-		i++;
-	}
-	newtab[i] = line;
+	i = -1;
+	len = ft_tablen(tab);
+	if (!(newtab = (char **)malloc(sizeof(char *) * (len + 1))))
+		return (NULL);
+	newtab[len] = NULL;
+	while (++i < len)
+		if (!(newtab[i] = ft_strnew(ft_strlen(tab[i]))))
+			return (NULL);
+	ft_tabcpy(newtab, tab);
 	return (newtab);
 }

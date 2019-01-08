@@ -76,7 +76,6 @@ char				*ft_itoa(int n);
 void				ft_putchar(char c);
 void				ft_putstr(char const *s);
 void				ft_putendl(char const *s);
-void				ft_printtab(char **tab, size_t length);
 void				ft_putnbr(int n);
 void				ft_putchar_fd(char c, int fd);
 void				ft_putstr_fd(char const *s, int fd);
@@ -102,9 +101,13 @@ int					**ft_addinttab(int **tab, int *line, size_t length);
 int					ft_sqrt(int nb);
 int					get_next_line(const int fd, char **line);
 void				ft_strfill(void *s, int c, size_t n);
-int				ft_tablen(char **tab);
+int					ft_atoi_base(const char *str, int base);
+void				ft_printtab(char **tab);
+void				ft_printtabl(char **tab);
+int					ft_tablen(char **tab);
 char				**ft_tabnew(size_t nline, size_t lline);
 void				ft_tabdel(char ***tab);
-int				ft_atoi_base(const char *str, int base);
+char				**ft_tabcpy(char **dest, char **src);
+char				**ft_tabdup(char **tab);
 
 #endif

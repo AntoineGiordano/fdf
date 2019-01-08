@@ -27,6 +27,7 @@ void	ft_put_line(t_window *win, t_dot *d1, t_dot *d2, int color)
 	int			nbpixels;
 	int			i;
 
+	//printf("ft_put_line\nD1 : %p\t-\tD2 : %p\n", d1, d2);
 	pas.x = d2->x - d1->x;
 	pas.y = d2->y - d1->y;
 	//printf("x1 = %f\ny1 = %f\n", d1->x, d1->y);

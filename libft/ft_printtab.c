@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_printtab.c                                   .::    .:/ .      .::   */
+/*   ft_printtab.c                                    .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: agiordan <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
@@ -13,11 +13,13 @@
 
 #include "libft.h"
 
-void	ft_printtab(char **tab, size_t length)
+void	ft_printtab(char **tab)
 {
 	int	i;
+	int	len;
 
+	len = ft_tablen(tab);
 	i = -1;
-	while (++i < (int) length)
+	while (++i < len)
 		ft_putendl(tab[i]);
 }

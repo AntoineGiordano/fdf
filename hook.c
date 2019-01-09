@@ -15,9 +15,12 @@
 
 void	ft_refresh(t_window *win)
 {
-	//reset_dots(win, win->inputs, win->map);
 	if (set_dots(win, win->inputs, win->map))
+	{
+		mlx_destroy_window(win->mlx, win->win);
+		reset_dots(win, win->inputs, win->map);
 		exit(EXIT_FAILURE);
+	}
 	mlx_clear_window(win->mlx, win->win);
 	print_dots(win, win->inputs, win->map);
 	//ft_print_bordure(win);
@@ -29,9 +32,10 @@ void	ft_refresh(t_window *win)
 int		key_hook(int keycode, t_window *win)
 {
 	printf("Key : %i\n", keycode);
-    	if (keycode == 53)
+    if (keycode == 53)
 	{
 		mlx_destroy_window(win->mlx, win->win);
+		reset_dots(win, win->inputs, win->map);
 		exit(EXIT_SUCCESS);
 	}
 	else if (keycode == 124)

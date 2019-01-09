@@ -22,11 +22,11 @@ void	reset_dots(t_window *win, t_inputs *inputs, t_map *map)
 	j = -1;
 	if (map->tabdot)
 	{
-		while (++i < inputs->leny)
+		while (map->tabdot[++i])
 		{
 			j = -1;
-			while (++j < inputs->lenx)
-					free(map->tabdot[i][j]);
+			while (map->tabdot[i][++j])
+				free(map->tabdot[i][j]);
 			free(map->tabdot[i]);
 		}
 		free(map->tabdot);
@@ -38,20 +38,22 @@ int		set_dots(t_window *win, t_inputs *inputs, t_map *map)
 	int		i;
 	int		j;
 
-	printf("Debut set dots\n");
+	//printf("Debut set dots\n");
 	i = -1;
 	while (++i < inputs->leny)
 	{
 		j = -1;
 		while (++j < inputs->lenx)
 		{
-			//printf("Set coord : %i - %i\n", j, i);
 			map->tabdot[i][j]->x = map->zoom * (map->i.x * (j - map->centre.x) + map->j.x * (i - map->centre.y) + map->k.x * inputs->tab[i][j]) + map->origin.x;
 			map->tabdot[i][j]->y = map->zoom * (map->i.y * (j - map->centre.x) + map->j.y * (i - map->centre.y) + map->k.y * inputs->tab[i][j]) + map->origin.y;
-			//sprintf("New point\t:\tx = %f\ny = %f\n\n", map->tabdot[0][0]->x, map->tabdot[0][0]->y);
+			
+			map->tabdot[i][j]->color.r = inputs->colors[i][j] / (16 * 16 * 16 * 16);
+			map->tabdot[i][j]->color.g = (inputs->colors[i][j] % (16 * 16 * 16 * 16)) / (16 * 16);
+			map->tabdot[i][j]->color.b = inputs->colors[i][j] % (16 * 16);
 		}	
 	}
-	printf("Fin set dots\n");
+	//printf("Fin set dots\n");
 	return (0);
 }
 
@@ -62,20 +64,15 @@ void	print_dots(t_window *win, t_inputs *inputs, t_map *map)
 	int	j;
 	int	i;
 
-	printf("Debut print dots\n");
-	//printf("Lenx : %i\t-\tLeny : %i\n", inputs->lenx, inputs->leny);
+	//printf("Debut print dots\n");
 	i = -1;
 	while (++i < inputs->leny)
 	{
 		j = -1;
 		while (++j < inputs->lenx)
 		{
-			//printf(".\n");
-			//printf("x = %f\ny = %f\n\n", map->tabdot[i][j]->x, map->tabdot[i][j]->y);
-
 			x = map->tabdot[i][j]->x;
 			y = map->tabdot[i][j]->y;
-
 			if (j + 1 != inputs->lenx)
 			{
 				if (!((x < 0 || x > win->width || y < 0 || y > win->height) &&
@@ -83,13 +80,8 @@ void	print_dots(t_window *win, t_inputs *inputs, t_map *map)
 				map->tabdot[i][j + 1]->x > win->width ||
 				map->tabdot[i][j + 1]->y < 0 ||
 				map->tabdot[i][j + 1]->y > win->height)))
-					//printf("...\n");
-					//printf("i = %i - j = %i : %p\n", i, j, map->tabdot[i][j + 1]);
-					//printf("%f\t%f\n", map->tabdot[i][j + 1]->x, map->tabdot[i][j + 1]->y);
-					//printf("D1 : %p\t-\tD2 : %p\n", map->tabdot[i][j], map->tabdot[i][j + 1]);
-					ft_put_line(win, map->tabdot[i][j], map->tabdot[i][j + 1], 0x00FF00);
+					ft_put_line(win, map->tabdot[i][j], map->tabdot[i][j + 1]);
 			}
-			//printf("Fin ligne 1\n");
 			if (i + 1 != inputs->leny)
 			{
 				if (!((x < 0 || x > win->width || y < 0 || y > win->height) &&
@@ -97,16 +89,11 @@ void	print_dots(t_window *win, t_inputs *inputs, t_map *map)
 				map->tabdot[i + 1][j]->x > win->width ||
 				map->tabdot[i + 1][j]->y < 0 ||
 				map->tabdot[i + 1][j]->y > win->height)))
-				//printf("...\n");
-				//printf("Point : %p\n", map->tabdot[i + 1][j]);
-				//printf("%f\t%f\n", map->tabdot[i + 1][j]->x, map->tabdot[i + 1][j]->y);
-				//printf("D1 : %p\t-\tD2 : %p\n", map->tabdot[i][j], map->tabdot[i + 1][j]);
-				ft_put_line(win, map->tabdot[i][j], map->tabdot[i + 1][j], 0x00FF00);
+				ft_put_line(win, map->tabdot[i][j], map->tabdot[i + 1][j]);
 			}
-			//printf("Fin ligne 2\n");
 		}
 	}
-	printf("Fin print dot\n");
+	//printf("Fin print dot\n");
 }
 
 void	ft_print_bordure(t_window *win)

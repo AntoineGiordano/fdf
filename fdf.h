@@ -21,10 +21,18 @@
 # include "minilibx_macos/mlx.h"
 # include "libft/libft.h"
 
+typedef struct	s_color
+{
+	float	    r;
+	float	    g;
+	float		b;
+}				t_color;
+
 typedef struct	s_dot
 {
 	float		x;
 	float		y;
+	t_color		color;
 }				t_dot;
 
 typedef struct	s_par
@@ -43,15 +51,15 @@ typedef struct	s_vector
 
 typedef struct	s_inputs
 {
-	int	fd;
-	char	*line;
-	char	**tabstr;
-
-	int	**tab;
-	int	*tmp;
-
-	int	lenx;
-	int	leny;
+	int			fd;
+	char		*line;
+	char		**tabstr;
+	int			**colors;
+	int			*tmpcolors;
+	int			**tab;
+	int			*tmptab;
+	int			lenx;
+	int			leny;
 }				t_inputs;
 
 typedef struct	s_map
@@ -76,7 +84,7 @@ typedef struct	s_window
 	t_inputs	*inputs;
 }				t_window;
 
-void			ft_put_line(t_window *window, t_dot *d1, t_dot *d2, int color);
+void			ft_put_line(t_window *window, t_dot *d1, t_dot *d2);
 void			ft_put_par(t_window *win, t_par par, int color);
 int				set_dots(t_window *win, t_inputs *inputs, t_map *map);
 void			print_dots(t_window *win, t_inputs *inputs, t_map *map);

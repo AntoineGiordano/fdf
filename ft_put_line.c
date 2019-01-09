@@ -21,11 +21,13 @@ float	ft_abs(float x)
 		return (-x);
 }
 
-void	ft_put_line(t_window *win, t_dot *d1, t_dot *d2, int color)
+void	ft_put_line(t_window *win, t_dot *d1, t_dot *d2)
 {
 	t_vector	pas;
 	int			nbpixels;
 	int			i;
+	t_color		dcolor;
+	int			color;
 
 	//printf("ft_put_line\nD1 : %p\t-\tD2 : %p\n", d1, d2);
 	pas.x = d2->x - d1->x;
@@ -44,9 +46,19 @@ void	ft_put_line(t_window *win, t_dot *d1, t_dot *d2, int color)
 		pas.x /= ft_abs(pas.y);
 		pas.y /= ft_abs(pas.y);
 	}
+	//printf("RGB 1 : %f, %f, %f\n", d1->color.r, d1->color.g, d1->color.b);
+	//printf("RGB 2 : %f, %f, %f\n", d2->color.r, d2->color.g, d2->color.b);
+	dcolor.r = (d2->color.r - d1->color.r) / nbpixels;
+	dcolor.g = (d2->color.g - d1->color.g) / nbpixels;
+	dcolor.b = (d2->color.b - d1->color.b) / nbpixels;
+	//printf("RGB : %f, %f, %f\t Avec n pixels : %i\n", dcolor.r, dcolor.g, dcolor.b, nbpixels);
 	i = -1;
 	while (++i < nbpixels)
 	{
+		color = (int)(d1->color.r + i * dcolor.r) << 16;
+		color += (int)(d1->color.g + i * dcolor.g) << 8;
+		color += (int)(d1->color.b + i * dcolor.b);
+
 		mlx_pixel_put(win->mlx, win->win,
 		d1->x + pas.x * i, d1->y + pas.y * i, color);
 	}
@@ -86,7 +98,7 @@ void	ft_put_par(t_window *win, t_par par, int color)
 	{
 		tmp.x = par.d2.x + line.x;
 		tmp.y = par.d2.y + line.y;
-		ft_put_line(win, &(par.d2), &tmp, color);
+		//ft_put_line(win, &(par.d2), &tmp, color);
 		par.d2.x += pas.x;
 		par.d2.y += pas.y;
 	}

@@ -6,7 +6,7 @@
 #    By: agiordan <agiordan@student.le-101.fr>      +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/10/03 17:31:01 by agiordan     #+#   ##    ##    #+#        #
-#    Updated: 2018/11/27 15:45:05 by agiordan    ###    #+. /#+    ###.fr      #
+#    Updated: 2019/01/08 19:14:51 by agiordan    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -84,6 +84,7 @@ FILE =	ft_memset.c \
 		ft_sqrt.c \
 		get_next_line.c \
 		ft_strfill.c \
+		ft_filltabint.c \
 		ft_atoi_base.c \
 		ft_tablen.c \
 		ft_tabnew.c \

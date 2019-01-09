@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   libft.h                                          .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: mwaterso <mwaterso@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: agiordan <mwaterso@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/03 17:31:57 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:45:37 by agiordan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/01/08 19:11:28 by agiordan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -101,6 +101,7 @@ int					**ft_addinttab(int **tab, int *line, size_t length);
 int					ft_sqrt(int nb);
 int					get_next_line(const int fd, char **line);
 void				ft_strfill(void *s, int c, size_t n);
+void				ft_filltabint(int **tab, size_t len, int nbr);
 int					ft_atoi_base(const char *str, int base);
 void				ft_printtab(char **tab);
 void				ft_printtabl(char **tab);

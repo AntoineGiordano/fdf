@@ -102,14 +102,14 @@ int		ft_parse(t_inputs *inputs, char *file)
 	int		ret;
 	int		j;
 	int		nline;
+	char		*info;
 
 	if ((inputs->fd = open(file, O_RDONLY)) == -1)
 		return (1);
 	if (!(inputs->tab = (int **)malloc(sizeof(int *))))
 		return (1);
-	//win->inputs->tab = NULL;
-	/*if (!(win->inputs->line = ft_strnew(0)))
-		return (1);*/
+	if (!(inputs->colors = (int **)malloc(sizeof(int **))))
+		return (1);
 	printf("Fin malloc tab & line\n");
 	nline = 0;
 	ret = 1;
@@ -117,12 +117,21 @@ int		ft_parse(t_inputs *inputs, char *file)
 	{
 		inputs->tabstr = ft_strsplit(inputs->line, ' ');
 		count = ft_tablen(inputs->tabstr);
-		if (!(inputs->tmp = (int *)malloc(sizeof(int) * count)))
+		if (!(inputs->tmptab = (int *)malloc(sizeof(int) * count)))
 			return (1);
+		if (!(inputs->tmpcolors = (int *)malloc(sizeof(int) * count)))
+			return (1);
+		ft_filltabint(&(inputs->tmpcolors), count, ft_atoi_base("FFFFFF", 16));
 		j = -1;
 		while (++j < count)
-			inputs->tmp[j] = ft_atoi(inputs->tabstr[j]);
-		inputs->tab = ft_addinttab(inputs->tab, inputs->tmp, nline);
+		{
+			info = inputs->tabstr[j];
+			inputs->tmptab[j] = ft_atoi(inputs->tabstr[j]);
+			if (ft_strlen(info) != ft_nbrlen(ft_atoi(info)))
+				inputs->tmpcolors[j] = ft_atoi_base(ft_strsub(info, ft_nbrlen(ft_atoi(info)) + 3, ft_strlen(info) - ft_nbrlen(ft_atoi(info)) - 3), 16);
+		}
+		inputs->tab = ft_addinttab(inputs->tab, inputs->tmptab, nline);
+		inputs->colors = ft_addinttab(inputs->colors, inputs->tmpcolors, nline);
         //printf("Apres addinttab\n");
 		nline++;
 	}
@@ -141,7 +150,33 @@ int		main(int ac, char **av)
 	
 	win.inputs = &inputs;
 	win.map = &map;
+
+
+	/*win.mlx = mlx_init();
+	win.win = mlx_new_window(win.mlx, 1000, 1000, "gv");
+	t_dot d1;
+	t_dot d2;
+	d1.x = 100;
+	d2.x = 900;
+	d1.y = 100;
+	d2.y = 900;
+	d1.color.r = ft_atoi_base("50BB50", 16) / (16 * 16 * 16 * 16);
+	d1.color.g = (ft_atoi_base("50BB50", 16) % (16 * 16 * 16 * 16)) / (16 * 16);
+	d1.color.b = ft_atoi_base("50BB50", 16) % (16 * 16);
+
+	d2.color.r = ft_atoi_base("5050FF", 16) / (16 * 16 * 16 * 16);
+	d2.color.g = (ft_atoi_base("5050FF", 16) % (16 * 16 * 16 * 16)) / (16 * 16);
+	d2.color.b = ft_atoi_base("5050FF", 16) % (16 * 16);
 	
+	printf("RGB 1 : %f, %f, %f\n", d1.color.r, d1.color.g, d1.color.b);
+	printf("RGB 2 : %f, %f, %f\n", d2.color.r, d2.color.g, d2.color.b);
+			
+	ft_put_line(&win, &d1, &d2);
+	mlx_loop(win.mlx);*/
+
+	
+
+
 	ifile = ft_params(&win, ac, av);
 	printf("Fin check params\n");
 

@@ -35,6 +35,15 @@ typedef struct	s_dot
 	t_color		color;
 }				t_dot;
 
+typedef struct	s_image
+{
+	void		*image_ptr;
+	int			bpp;
+	int			s_l;
+	int			endian;
+	char		*image;
+}				t_image;
+
 typedef struct	s_par
 {
 	t_dot		d1;
@@ -53,17 +62,18 @@ typedef struct	s_inputs
 {
 	int			fd;
 	char		*line;
-	char		**tabstr;
-	int			**colors;
-	int			*tmpcolors;
-	int			**tab;
-	int			*tmptab;
+	char		**tabline;//
+	int			*tmpcolors;//
+	int			**colors;//
+	int			*tmptab;//
+	int			**tab;//
 	int			lenx;
 	int			leny;
 }				t_inputs;
 
 typedef struct	s_map
 {
+	t_image		*image;
 	t_dot		origin;
 	t_dot		centre;
 	t_vector	i;
@@ -84,16 +94,18 @@ typedef struct	s_window
 	t_inputs	*inputs;
 }				t_window;
 
-void			ft_put_line(t_window *window, t_dot *d1, t_dot *d2);
-void			ft_put_par(t_window *win, t_par par, int color);
+int				ft_params(t_window *win, int ac, char **av);
+int				ft_parse(t_inputs *inputs, char *file);
+void			ft_refresh(t_window *win, t_image *image);
 int				set_dots(t_window *win, t_inputs *inputs, t_map *map);
+void			reset_dots(t_window *win, t_inputs *inputs, t_map *map);
 void			print_dots(t_window *win, t_inputs *inputs, t_map *map);
 t_par			set_par(t_dot *d1, t_dot *d2, t_dot *d3, t_dot *d4);
+void			ft_put_line(t_window *window, t_dot *d1, t_dot *d2);
+void			ft_put_par(t_window *win, t_par par, int color);
+void			ft_print_bordure(t_window *win);
 int				key_hook(int keycode, t_window *win);
 int     		mouse_hook(int button, int x, int y, t_window *win);
-void			ft_refresh(t_window *win);
-void			reset_dots(t_window *win, t_inputs *inputs, t_map *map);
-void			ft_print_bordure(t_window *win);
 void			ft_parallele(t_window *win, int keycode);
 
 #endif

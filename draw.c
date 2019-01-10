@@ -38,7 +38,7 @@ int		set_dots(t_window *win, t_inputs *inputs, t_map *map)
 	int		i;
 	int		j;
 
-	//printf("Debut set dots\n");
+	printf("Debut set dots\n");
 	i = -1;
 	while (++i < inputs->leny)
 	{
@@ -53,7 +53,7 @@ int		set_dots(t_window *win, t_inputs *inputs, t_map *map)
 			map->tabdot[i][j]->color.b = inputs->colors[i][j] % (16 * 16);
 		}	
 	}
-	//printf("Fin set dots\n");
+	printf("Fin set dots\n");
 	return (0);
 }
 
@@ -64,13 +64,15 @@ void	print_dots(t_window *win, t_inputs *inputs, t_map *map)
 	int	j;
 	int	i;
 
-	//printf("Debut print dots\n");
+	printf("Debut print dots\n");
 	i = -1;
 	while (++i < inputs->leny)
 	{
 		j = -1;
 		while (++j < inputs->lenx)
 		{
+			printf(".\n");
+			printf("x = %f\t-\ty = %f\n", map->tabdot[i][j]->x, map->tabdot[i][j]->y);
 			x = map->tabdot[i][j]->x;
 			y = map->tabdot[i][j]->y;
 			if (j + 1 != inputs->lenx)
@@ -80,7 +82,7 @@ void	print_dots(t_window *win, t_inputs *inputs, t_map *map)
 				map->tabdot[i][j + 1]->x > win->width ||
 				map->tabdot[i][j + 1]->y < 0 ||
 				map->tabdot[i][j + 1]->y > win->height)))
-					ft_put_line(win, map->tabdot[i][j], map->tabdot[i][j + 1]);
+				ft_put_line(win, map->tabdot[i][j], map->tabdot[i][j + 1]);
 			}
 			if (i + 1 != inputs->leny)
 			{
@@ -93,7 +95,7 @@ void	print_dots(t_window *win, t_inputs *inputs, t_map *map)
 			}
 		}
 	}
-	//printf("Fin print dot\n");
+	printf("Fin print dot\n");
 }
 
 void	ft_print_bordure(t_window *win)
@@ -134,12 +136,6 @@ void	ft_print_bordure(t_window *win)
 	par.d4.y = d4->y;
 	return (par);
 }*/
-
-/*if (j + 1 < inputs->lenx && i + 1 < inputs->leny)
-			{
-				par = set_par(map->tabdot[i][j], map->tabdot[i][j + 1], map->tabdot[i + 1][j + 1], map->tabdot[i + 1][j]);
-				ft_put_par(win, par, 0x00FF00);
-			}*/
 
 /*printf("Fin malloc 3 :\n");
 			printf("%f\n", map->zoom);

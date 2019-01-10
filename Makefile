@@ -14,6 +14,7 @@
 NAME = fdf
 
 SRC =	fdf.c \
+		parse.c \
 		ft_put_line.c \
 		draw.c \
 		hook.c \

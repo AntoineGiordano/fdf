@@ -13,39 +13,44 @@
 
 #include "fdf.h"
 
-int		ft_params(t_window *win, int ac, char **av)
+void	ft_set_null(t_window *win, t_inputs *inputs, t_image *image)
 {
-	int			i;
-	int			ifile;
+	win->mlx = NULL;
+	win->win = NULL;
+	win->name = NULL;
+	inputs->line = NULL;
+	inputs->tabline = NULL;
+	inputs->tmpcolors = NULL;
+	inputs->colors = NULL;
+	inputs->tmptab = NULL;
+	inputs->tab = NULL;
+	image->image_ptr = NULL;
+	image->image = NULL;
+}
 
-	i = 0;
-	ifile = 1;
-	win->name = ft_strdup("Fdf");
-	win->width = 1000;
-	win->height = 1000;
-	printf("Nombre params : %i\n", ac);
-	if (ac == 1)
-		ft_putstr("Fichier manquant\n");
-	while (++i < ac)
+int		ft_clear_memory(t_window *win, t_inputs *inputs) //free 3 void *
+{
+	if (win->win)
+		mlx_destroy_window(win->mlx, win->win);
+	if (win->map->image->image_ptr)
 	{
-		if (!ft_strcmp(av[i], "-name"))
-		{
-			if (i + 1 < ac)
-				win->name = av[i + 1];
-			i++;
-		}
-		else if (!ft_strcmp(av[i], "-len"))
-		{
-			if (i + 1 < ac)
-				win->width = ft_atoi(av[i++ + 1]);
-			if (i + 1 < ac)
-				win->height = ft_atoi(av[i++ + 2]);
-		}
-		else
-			ifile = i;
+		mlx_destroy_image(win->mlx, win->map->image->image_ptr);
+		free(win->map->image->image_ptr);
 	}
-	
-	return (ifile);
+	ft_strdel(&(win->map->image->image));
+	reset_dots(win, win->inputs, win->map);
+	ft_strdel(&(win->name));
+	ft_strdel(&(inputs->line));
+	ft_tabdel(&(inputs->tabline));
+	ft_tabintdel(&(inputs->tmpcolors));
+	ft_tabint2del(&(inputs->colors), win->height);
+	ft_tabintdel(&(inputs->tmptab));
+	ft_tabint2del(&(inputs->tab), win->height);
+	free(win->map->image);
+	free(win->map);
+	free(win->inputs);
+	free(win);
+	return (0);
 }
 
 int		ft_init_tabdot(t_window *win, t_inputs *inputs, t_map *map)
@@ -66,20 +71,19 @@ int		ft_init_tabdot(t_window *win, t_inputs *inputs, t_map *map)
 		map->tabdot[i][inputs->lenx] = NULL;
 		j = -1;
 		while (++j < inputs->lenx)
-		{
 			if (!(map->tabdot[i][j] = (t_dot *)malloc(sizeof(t_dot))))
 				return (1);
-			//map->tabdot[i][j]->x = -1;
-			//map->tabdot[i][j]->y = -1;
-		}
 	}
 	return (0);
 }
 
-int		ft_init(t_window *win, t_inputs *inputs, t_map *map)
+int		ft_init(t_window *win, t_inputs *inputs, t_map *map, t_image *image)
 {
 	win->mlx = mlx_init();
 	win->win = mlx_new_window(win->mlx, win->width, win->height, win->name);
+	win->map->image->image_ptr = mlx_new_image(win->mlx, win->width, win->height);
+	image->image = mlx_get_data_addr(image->image_ptr,
+					&(image->bpp), &(image->s_l), &(image->endian));
 	map->zoom = 1.5;
 	map->origin.x = win->width / 2;
 	map->origin.y = win->height / 2;
@@ -91,53 +95,8 @@ int		ft_init(t_window *win, t_inputs *inputs, t_map *map)
 	map->k.y = map->zoom * (-10.7);
 	map->centre.x = win->inputs->lenx / 2 - ((win->inputs->lenx % 2) ? 0 : 0.5);
 	map->centre.y = win->inputs->leny / 2 - ((win->inputs->leny % 2) ? 0 : 0.5);
-	ft_init_tabdot(win, inputs, map);
-	return (0);
-}
-
-int		ft_parse(t_inputs *inputs, char *file)
-{
-	//gnl - split - nb de cases - malloc tabint - convertir char/int - addinttab -
-	int		count;
-	int		ret;
-	int		j;
-	int		nline;
-	char		*info;
-
-	if ((inputs->fd = open(file, O_RDONLY)) == -1)
+	if (ft_init_tabdot(win, inputs, map))
 		return (1);
-	if (!(inputs->tab = (int **)malloc(sizeof(int *))))
-		return (1);
-	if (!(inputs->colors = (int **)malloc(sizeof(int **))))
-		return (1);
-	printf("Fin malloc tab & line\n");
-	nline = 0;
-	ret = 1;
-	while ((ret = get_next_line(inputs->fd, &(inputs->line))) == 1)
-	{
-		inputs->tabstr = ft_strsplit(inputs->line, ' ');
-		count = ft_tablen(inputs->tabstr);
-		if (!(inputs->tmptab = (int *)malloc(sizeof(int) * count)))
-			return (1);
-		if (!(inputs->tmpcolors = (int *)malloc(sizeof(int) * count)))
-			return (1);
-		ft_filltabint(&(inputs->tmpcolors), count, ft_atoi_base("FFFFFF", 16));
-		j = -1;
-		while (++j < count)
-		{
-			info = inputs->tabstr[j];
-			inputs->tmptab[j] = ft_atoi(inputs->tabstr[j]);
-			if (ft_strlen(info) != ft_nbrlen(ft_atoi(info)))
-				inputs->tmpcolors[j] = ft_atoi_base(ft_strsub(info, ft_nbrlen(ft_atoi(info)) + 3, ft_strlen(info) - ft_nbrlen(ft_atoi(info)) - 3), 16);
-		}
-		inputs->tab = ft_addinttab(inputs->tab, inputs->tmptab, nline);
-		inputs->colors = ft_addinttab(inputs->colors, inputs->tmpcolors, nline);
-        //printf("Apres addinttab\n");
-		nline++;
-	}
-	inputs->lenx = count;
-	inputs->leny = nline;
-	//printf("Leny : %i\n", win->inputs->leny);
 	return (0);
 }
 
@@ -145,14 +104,36 @@ int		main(int ac, char **av)
 {
 	t_window	win;
 	t_map		map;
+	t_image		image;
 	t_inputs	inputs;
 	int			ifile;
 	
-	win.inputs = &inputs;
-	win.map = &map;
+	if (ac == 1)
+		ft_putstr("usage: [-name window's_name] | [-len width height] file\n");
+	else
+	{
+		win.inputs = &inputs;
+		win.map = &map;
+		win.map->image = &image;
+		if ((ifile = ft_params(&win, ac, av)) == -1)
+			return (ft_clear_memory(&win, &inputs)); 
+		//printf("Fin check params\n");
+		ft_set_null(&win, &inputs, &image);
+		if (ft_parse(&inputs, av[ifile]))
+			return (ft_clear_memory(&win, &inputs));
+		//printf("Fin set parse\n");
+		if (ft_init(&win, win.inputs, win.map, win.map->image))
+			return (ft_clear_memory(&win, &inputs));
+		//printf("Fin set init\n");
+		ft_refresh(&win, win.map->image);
+		mlx_mouse_hook(win.win, mouse_hook, &win);
+		mlx_key_hook(win.win, key_hook, &win);
+		mlx_loop(win.mlx);
+	}
+	return (0);
+}
 
-
-	/*win.mlx = mlx_init();
+/*win.mlx = mlx_init();
 	win.win = mlx_new_window(win.mlx, 1000, 1000, "gv");
 	t_dot d1;
 	t_dot d2;
@@ -174,27 +155,7 @@ int		main(int ac, char **av)
 	ft_put_line(&win, &d1, &d2);
 	mlx_loop(win.mlx);*/
 
-	
 
-
-	ifile = ft_params(&win, ac, av);
-	printf("Fin check params\n");
-
-	if (ft_parse(&inputs, av[ifile]))
-		return (0);
-	printf("Fin set parse\n");
-
-	if (ft_init(&win, win.inputs, win.map))
-		return (0);
-	printf("Fin set init\n");
-
-	ft_refresh(&win);
-	//ft_print_bordure(&win);
-	mlx_mouse_hook(win.win, mouse_hook, &win);
-	mlx_key_hook(win.win, key_hook, &win);
-	mlx_loop(win.mlx);
-	return (0);
-}
 
 //ATTENTION FICHIERS INVALIDE
 

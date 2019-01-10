@@ -21,19 +21,25 @@ float	ft_abs(float x)
 		return (-x);
 }
 
+void	set_pixel(t_image *image, int x, int y, t_color *color)
+{
+	printf("Debut set pixel\n");
+	image->image[4 * (x + y * image->s_l) + 0] = (int)(color->r);
+	image->image[4 * (x + y * image->s_l) + 1] = (int)(color->g);
+	image->image[4 * (x + y * image->s_l) + 2] = (int)(color->b);
+}
+
 void	ft_put_line(t_window *win, t_dot *d1, t_dot *d2)
 {
 	t_vector	pas;
 	int			nbpixels;
 	int			i;
 	t_color		dcolor;
-	int			color;
+	t_color		color;
 
-	//printf("ft_put_line\nD1 : %p\t-\tD2 : %p\n", d1, d2);
+	//printf("Debut put line\n");
 	pas.x = d2->x - d1->x;
 	pas.y = d2->y - d1->y;
-	//printf("x1 = %f\ny1 = %f\n", d1->x, d1->y);
-	//printf("x2 = %f\ny2 = %f\n\n\n\n\n", d2->x, d2->y);
 	if (ft_abs(pas.x) > ft_abs(pas.y))
 	{
 		nbpixels = ft_abs(pas.x);
@@ -46,21 +52,20 @@ void	ft_put_line(t_window *win, t_dot *d1, t_dot *d2)
 		pas.x /= ft_abs(pas.y);
 		pas.y /= ft_abs(pas.y);
 	}
-	//printf("RGB 1 : %f, %f, %f\n", d1->color.r, d1->color.g, d1->color.b);
-	//printf("RGB 2 : %f, %f, %f\n", d2->color.r, d2->color.g, d2->color.b);
+	printf("RGB 1 : %f, %f, %f\n", d1->color.r, d1->color.g, d1->color.b);
+	printf("RGB 2 : %f, %f, %f\n", d2->color.r, d2->color.g, d2->color.b);
 	dcolor.r = (d2->color.r - d1->color.r) / nbpixels;
 	dcolor.g = (d2->color.g - d1->color.g) / nbpixels;
 	dcolor.b = (d2->color.b - d1->color.b) / nbpixels;
-	//printf("RGB : %f, %f, %f\t Avec n pixels : %i\n", dcolor.r, dcolor.g, dcolor.b, nbpixels);
+	printf("Quantum RGB : %f, %f, %f\t Avec n pixels : %i\n", dcolor.r, dcolor.g, dcolor.b, nbpixels);
 	i = -1;
 	while (++i < nbpixels)
 	{
-		color = (int)(d1->color.r + i * dcolor.r) << 16;
-		color += (int)(d1->color.g + i * dcolor.g) << 8;
-		color += (int)(d1->color.b + i * dcolor.b);
+		color.r = d1->color.r + i * dcolor.r;
+		color.g = d1->color.g + i * dcolor.g;
+		color.b = d1->color.b + i * dcolor.b;
 
-		mlx_pixel_put(win->mlx, win->win,
-		d1->x + pas.x * i, d1->y + pas.y * i, color);
+		set_pixel(win->map->image, d1->x + pas.x * i, d1->y + pas.y * i, &color);
 	}
 }
 

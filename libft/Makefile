@@ -6,7 +6,7 @@
 #    By: agiordan <agiordan@student.le-101.fr>      +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/10/03 17:31:01 by agiordan     #+#   ##    ##    #+#        #
-#    Updated: 2019/01/08 19:14:51 by agiordan    ###    #+. /#+    ###.fr      #
+#    Updated: 2019/01/10 18:53:47 by agiordan    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -92,7 +92,9 @@ FILE =	ft_memset.c \
 		ft_tabcpy.c \
 		ft_tabdup.c \
 		ft_printtab.c \
-		ft_printtabl.c
+		ft_printtabl.c \
+		ft_tabintdel.c \
+		ft_tabint2del.c
 OBJETS = $(FILE:.c=.o)
 HEADER = libft.h
 FLAGS = -Werror -Wextra -Wall -c

@@ -13,16 +13,21 @@
 
 #include "fdf.h"
 
-void	ft_refresh(t_window *win)
+void	ft_refresh(t_window *win, t_image *image)
 {
 	if (set_dots(win, win->inputs, win->map))
-	{
-		mlx_destroy_window(win->mlx, win->win);
-		reset_dots(win, win->inputs, win->map);
-		exit(EXIT_FAILURE);
-	}
+	
 	mlx_clear_window(win->mlx, win->win);
+	
+	printf("Debut switch image\n");
+
+	mlx_destroy_image(win->mlx, image->image_ptr);
+	image->image_ptr = mlx_new_image(win->mlx, win->width, win->height);
+	image->image = mlx_get_data_addr(image->image_ptr,
+					&(image->bpp), &(image->s_l), &(image->endian));
+
 	print_dots(win, win->inputs, win->map);
+	mlx_put_image_to_window(win->mlx, win->win, win->map->image->image_ptr, 0, 0);
 	//ft_print_bordure(win);
 	mlx_string_put(win->mlx, win->win, \
 	win->width / 2 - (10 * ft_strlen(win->name) / 2), \
@@ -47,7 +52,7 @@ int		key_hook(int keycode, t_window *win)
     else if (keycode == 126)
 		win->map->origin.y += 15;
 	ft_parallele(win, keycode);
-	ft_refresh(win);
+	ft_refresh(win, win->map->image);
 	return (0);
 }
 
@@ -61,7 +66,7 @@ int     mouse_hook(int button, int x, int y, t_window *win)
 	if (win->map->zoom < 0)
 		win->map->zoom = 0;
 	if (button == 4 || button == 5)
-		ft_refresh(win);
+		ft_refresh(win, win->map->image);
 	return (0);
 }
 

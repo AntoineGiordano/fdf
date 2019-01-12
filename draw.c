@@ -33,12 +33,34 @@ void	reset_dots(t_window *win, t_inputs *inputs, t_map *map)
 	}
 }
 
+int		maping(t_window *win, int mincolor, int maxcolor, double prop)
+{
+	int r;
+	int g;
+	int b;
+	
+	r = (int)(prop * (((maxcolor >> 16) & 0xFF) - ((mincolor >> 16) & 0xFF))) + ((mincolor >> 16) & 0xFF);
+	g = (int)(prop * (((maxcolor >> 8) & 0xFF) - ((mincolor >> 8) & 0xFF))) + ((mincolor >> 8) & 0xFF);
+	b = (int)(prop * ((maxcolor & 0xFF) - (mincolor & 0xFF))) + (mincolor & 0xFF);
+	//printf("R : %i\tG : %i\tB : %i\n", r, g, b);
+	return ((r << 16) | (g << 8) | (b | 0));
+}
+
+int		set_color(t_window *win, int z)
+{
+	double prop;
+
+	prop = (double)(z - win->map->minz) / (double)(win->map->maxz - win->map->minz);
+	//printf("Prop : %f\n", prop);
+	return (maping(win, win->mincolor, win->maxcolor, prop));
+}
+
 int		set_dots(t_window *win, t_inputs *inputs, t_map *map)
 {
 	int		i;
 	int		j;
 
-	printf("Debut set dots\n");
+	//printf("Debut set dots\n");
 	i = -1;
 	while (++i < inputs->leny)
 	{
@@ -47,13 +69,19 @@ int		set_dots(t_window *win, t_inputs *inputs, t_map *map)
 		{
 			map->tabdot[i][j]->x = map->zoom * (map->i.x * (j - map->centre.x) + map->j.x * (i - map->centre.y) + map->k.x * inputs->tab[i][j]) + map->origin.x;
 			map->tabdot[i][j]->y = map->zoom * (map->i.y * (j - map->centre.x) + map->j.y * (i - map->centre.y) + map->k.y * inputs->tab[i][j]) + map->origin.y;
-			
-			map->tabdot[i][j]->color.r = inputs->colors[i][j] / (16 * 16 * 16 * 16);
-			map->tabdot[i][j]->color.g = (inputs->colors[i][j] % (16 * 16 * 16 * 16)) / (16 * 16);
-			map->tabdot[i][j]->color.b = inputs->colors[i][j] % (16 * 16);
+			if (win->colorparam)
+			{
+				map->tabdot[i][j]->color = set_color(win, inputs->tab[i][j]);
+				//printf("Color : %#x\n", map->tabdot[i][j]->color);
+			}
+			else
+				map->tabdot[i][j]->color = inputs->colors[i][j];
 		}	
 	}
-	printf("Fin set dots\n");
+	//printf("Max : %#x\nMin : %#x\n", win->maxcolor, win->mincolor);
+	//printf("Test : %#x\n", maping(win, win->mincolor, win->maxcolor, 1));
+	//printf("Test : %#x\n", maping(win, win->mincolor, win->maxcolor, 0));
+	//printf("Fin set dots\n");
 	return (0);
 }
 
@@ -64,15 +92,15 @@ void	print_dots(t_window *win, t_inputs *inputs, t_map *map)
 	int	j;
 	int	i;
 
-	printf("Debut print dots\n");
+	//printf("Debut print dots\n");
 	i = -1;
 	while (++i < inputs->leny)
 	{
 		j = -1;
 		while (++j < inputs->lenx)
 		{
-			printf(".\n");
-			printf("x = %f\t-\ty = %f\n", map->tabdot[i][j]->x, map->tabdot[i][j]->y);
+			//printf(".\n");
+			//printf("x = %f\t-\ty = %f\n", map->tabdot[i][j]->x, map->tabdot[i][j]->y);
 			x = map->tabdot[i][j]->x;
 			y = map->tabdot[i][j]->y;
 			if (j + 1 != inputs->lenx)
@@ -95,9 +123,9 @@ void	print_dots(t_window *win, t_inputs *inputs, t_map *map)
 			}
 		}
 	}
-	printf("Fin print dot\n");
+	//printf("Fin print dot\n");
 }
-
+/*
 void	ft_print_bordure(t_window *win)
 {
 	t_par	bordure;
@@ -122,7 +150,7 @@ void	ft_print_bordure(t_window *win)
 	ft_put_par(win, bordure, 0x50BB50);
 }
 
-/*t_par	set_par(t_dot *d1, t_dot *d2, t_dot *d3, t_dot *d4)
+t_par	set_par(t_dot *d1, t_dot *d2, t_dot *d3, t_dot *d4)
 {
 	t_par	par;
 
@@ -146,3 +174,4 @@ void	ft_print_bordure(t_window *win)
 			printf("%f\n", map->k.x);
 			printf("%f\n", map->origin.x);
 			printf("%f\n", inputs->tab[i][j]);*/
+			//ne pas prendre les maps invalide ou si on passe un binaire ou un dossier (avec char in center, maps no rectangles, checks char invalide)

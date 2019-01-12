@@ -6,13 +6,12 @@
 /*   By: agiordan <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/06 22:16:45 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2018/10/06 22:16:48 by agiordan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/01/10 19:45:22 by agiordan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include <string.h>
-#include <stdlib.h>
+#include "libft.h"
 
 void	ft_strdel(char **ap)
 {

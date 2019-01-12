@@ -13,38 +13,77 @@
 
 #include "fdf.h"
 
+int		ft_params_2(t_window *win, int ac, char **av, int *i)
+{
+	if (!ft_strcmp(av[*i], "-name"))
+	{
+		if (*i + 1 < ac)
+			win->name = av[(*i)++ + 1];
+	}
+	else if (!ft_strcmp(av[*i], "-len"))
+	{
+		if (*i + 1 < ac)
+			win->width = ft_atoi(av[++(*i)]);
+		if (*i + 1 < ac)
+			win->height = ft_atoi(av[++(*i)]);
+	}
+	else if (!ft_strcmp(av[*i], "-color"))
+	{
+		win->colorparam = 1;
+		if (*i + 1 < ac)
+			win->mincolor = ft_atoi_base(av[++(*i)], 16);
+		if (*i + 1 < ac)
+			win->maxcolor = ft_atoi_base(av[++(*i)], 16);
+		printf("Min : %i\nMax : %i\n", win->mincolor, win->maxcolor);
+	}
+	else
+		return (1);
+	return (0);
+}
+
 int		ft_params(t_window *win, int ac, char **av)
 {
 	int			i;
 	int			ifile;
 
-	i = 0;
+	i = 1;
 	ifile = -1;
+	win->colorparam = 0;
 	win->name = ft_strdup("Fdf");
 	win->width = 1000;
 	win->height = 1000;
-	printf("Nombre params : %i\n", ac);
-	while (++i < ac)
+	win->maxcolor = 0x50BB50;
+	win->mincolor = 0xFFFFFF;
+	while (i < ac)
 	{
-		if (!ft_strcmp(av[i], "-name"))
-		{
-			if (i + 1 < ac)
-				win->name = av[i + 1];
-		}
-		else if (!ft_strcmp(av[++i], "-len"))
-		{
-			if (i + 1 < ac)
-				win->width = ft_atoi(av[i++ + 1]);
-			if (i + 1 < ac)
-				win->height = ft_atoi(av[i++ + 2]);
-		}
-		else
+		if (ft_params_2(win, ac, av, &i))
 			ifile = i;
+		i++;
 	}
+	//printf("fin params 1\n");
 	return (ifile);
 }
+/*
+min        current                max
+RGB1       color                  RGB2
+*/
 
-int		ft_parse_2(t_inputs *inputs, int *count, int *nline)
+void	set_z(t_window *win, t_inputs *inputs, char *line, int j)
+{
+	//printf("Debut set z\n");
+	line = inputs->tabline[j];
+	inputs->tmptab[j] = ft_atoi(line);
+	if (inputs->tmptab[j] > win->map->maxz)
+		win->map->maxz = inputs->tmptab[j];
+	if (inputs->tmptab[j] < win->map->minz)
+		win->map->minz = inputs->tmptab[j];
+	if ((!(win->colorparam) && (ft_strlen(line) != ft_nbrlen(ft_atoi(line)))) ||
+	((ft_strlen(line) != ft_nbrlen(ft_atoi(line)) + 1) && line[0] == '-'))
+		inputs->tmpcolors[j] = ft_atoi_base(ft_strsub(line, ft_nbrlen(ft_atoi(line)) + 3, ft_strlen(line) - ft_nbrlen(ft_atoi(line)) - 3), 16);
+	//printf("Fin set z\n");
+}
+
+int		ft_parse_2(t_window *win, t_inputs *inputs, int *count, int *nline)
 {
 	char	*line;
 	int		j;
@@ -59,17 +98,17 @@ int		ft_parse_2(t_inputs *inputs, int *count, int *nline)
 	j = -1;
 	while (++j < *count)
 	{
-		line = inputs->tabline[j];
-		inputs->tmptab[j] = ft_atoi(inputs->tabline[j]);
-		if (ft_strlen(line) != ft_nbrlen(ft_atoi(line)))
-			inputs->tmpcolors[j] = ft_atoi_base(ft_strsub(line, ft_nbrlen(ft_atoi(line)) + 3, ft_strlen(line) - ft_nbrlen(ft_atoi(line)) - 3), 16);
+		//printf("Nb : %s\n", inputs->tabline[j]);
+		set_z(win, inputs, line, j);
 	}
 	inputs->tab = ft_addinttab(inputs->tab, inputs->tmptab, *nline);
 	inputs->colors = ft_addinttab(inputs->colors, inputs->tmpcolors, *nline);
+	free(inputs->tabline);
+	//printf("Fin sous parse\n");
 	return (0);
 }
 
-int		ft_parse(t_inputs *inputs, char *file)
+int		ft_parse(t_window *win, t_inputs *inputs, char *file)
 {
 	//gnl - split - nb de cases - malloc tabint - convertir char/int - addinttab -
 	int		count;
@@ -87,8 +126,9 @@ int		ft_parse(t_inputs *inputs, char *file)
 	ret = 1;
 	while ((ret = get_next_line(inputs->fd, &(inputs->line))) == 1)
 	{
-		if (ft_parse_2(inputs, &count, &nline))
+		if (ft_parse_2(win, inputs, &count, &nline))
 			return (1);
+		free(inputs->line);
 		nline++;
 	}
 	inputs->lenx = count;

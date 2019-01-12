@@ -6,7 +6,7 @@
 /*   By: agiordan <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/01/07 14:49:14 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2019/01/10 18:48:35 by agiordan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/01/10 20:08:05 by agiordan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -17,7 +17,7 @@ void	ft_tabdel(char ***tab)
 {
 	int	i;
 
-	if (!tab)
+	if (!tab | !(*tab))
 		return ;
 	i = -1;
 	while ((*tab)[++i])

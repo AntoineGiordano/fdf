@@ -32,7 +32,7 @@ typedef struct	s_dot
 {
 	float		x;
 	float		y;
-	t_color		color;
+	int			color;
 }				t_dot;
 
 typedef struct	s_image
@@ -41,7 +41,7 @@ typedef struct	s_image
 	int			bpp;
 	int			s_l;
 	int			endian;
-	char		*image;
+	int			*image;
 }				t_image;
 
 typedef struct	s_par
@@ -62,11 +62,11 @@ typedef struct	s_inputs
 {
 	int			fd;
 	char		*line;
-	char		**tabline;//
-	int			*tmpcolors;//
-	int			**colors;//
-	int			*tmptab;//
-	int			**tab;//
+	char		**tabline;
+	int			*tmpcolors;
+	int			**colors;
+	int			*tmptab;
+	int			**tab;
 	int			lenx;
 	int			leny;
 }				t_inputs;
@@ -80,6 +80,8 @@ typedef struct	s_map
 	t_vector	j;
 	t_vector	k;
 	t_dot		***tabdot;
+	int			minz;
+	int			maxz;
 	float		zoom;
 }			    t_map;
 
@@ -90,12 +92,15 @@ typedef struct	s_window
 	int			width;
 	int			height;
 	char		*name;
+	int			colorparam;
+	int			maxcolor;
+	int			mincolor;
 	t_map		*map;
 	t_inputs	*inputs;
 }				t_window;
 
 int				ft_params(t_window *win, int ac, char **av);
-int				ft_parse(t_inputs *inputs, char *file);
+int				ft_parse(t_window *win, t_inputs *inputs, char *file);
 void			ft_refresh(t_window *win, t_image *image);
 int				set_dots(t_window *win, t_inputs *inputs, t_map *map);
 void			reset_dots(t_window *win, t_inputs *inputs, t_map *map);
@@ -107,5 +112,8 @@ void			ft_print_bordure(t_window *win);
 int				key_hook(int keycode, t_window *win);
 int     		mouse_hook(int button, int x, int y, t_window *win);
 void			ft_parallele(t_window *win, int keycode);
+int				ft_clear_memory(t_window *win, t_inputs *inputs);
+int				set_dots(t_window *win, t_inputs *inputs, t_map *map);
+int				maping(t_window *win, int mincolor, int maxcolor, double prop);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   libft.h                                          .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: agiordan <mwaterso@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: agiordan <agiordan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/03 17:31:57 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2019/01/10 18:54:49 by agiordan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/01/14 05:38:24 by agiordan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -112,5 +112,6 @@ char				**ft_tabcpy(char **dest, char **src);
 char				**ft_tabdup(char **tab);
 void				ft_tabintdel(int **tab);
 void				ft_tabint2del(int ***tab, size_t len);
+double				ft_abs(double x);
 
 #endif

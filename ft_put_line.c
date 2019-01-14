@@ -13,12 +13,46 @@
 
 #include "fdf.h"
 
-float	ft_abs(float x)
+int		maping(t_window *win, int mincolor, int maxcolor, double prop)
 {
-	if (x >= 0)
-		return (x);
-	else
-		return (-x);
+	int r;
+	int g;
+	int b;
+
+	r = (int)(prop * (((maxcolor >> 16) & 0xFF) - ((mincolor >> 16) & 0xFF))) +
+		((mincolor >> 16) & 0xFF);
+	g = (int)(prop * (((maxcolor >> 8) & 0xFF) - ((mincolor >> 8) & 0xFF))) +
+		((mincolor >> 8) & 0xFF);
+	b = (int)(prop * ((maxcolor & 0xFF) - (mincolor & 0xFF))) +
+		(mincolor & 0xFF);
+	return ((r << 16) | (g << 8) | (b | 0));
+}
+
+int		set_color(t_window *win, int z)
+{
+	double prop;
+
+	prop = (double)(z - win->map->minz) /
+	(double)(win->map->maxz - win->map->minz);
+	return (maping(win, win->mincolor, win->maxcolor, prop));
+}
+
+int		colors(t_window *win, t_inputs *inputs, t_map *map)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	if (win->colorparam)
+	{
+		while (++i < inputs->leny)
+		{
+			j = -1;
+			while (++j < inputs->lenx[i])
+				map->tabdot[i][j]->color = set_color(win, inputs->tab[i][j]);
+		}
+	}
+	return (0);
 }
 
 void	set_pixel(t_window *win, int x, int y, int color)
@@ -34,7 +68,6 @@ void	ft_put_line(t_window *win, t_dot *d1, t_dot *d2)
 	int			i;
 	int			color;
 
-	//printf("Debut put line\n");
 	pas.x = d2->x - d1->x;
 	pas.y = d2->y - d1->y;
 	if (ft_abs(pas.x) > ft_abs(pas.y))
@@ -49,55 +82,10 @@ void	ft_put_line(t_window *win, t_dot *d1, t_dot *d2)
 		pas.x /= ft_abs(pas.y);
 		pas.y /= ft_abs(pas.y);
 	}
-	//printf("RGB1 : %#x\t RGB2 : %#x\n", d1->color, d2->color);
 	i = -1;
 	while (++i < nbpixels)
 	{
 		color = maping(win, d1->color, d2->color, (double)i / (double)nbpixels);
-		//printf("Color pixel : %#x\n", color);
 		set_pixel(win, d1->x + pas.x * i, d1->y + pas.y * i, color);
 	}
-} // Test avec directement i / nbpixels * diffx
-
-/*
-void	set_pas(t_dot d2, t_dot d3, t_vector *pas, int *nbpixels)
-{
-	pas->x = d3.x - d2.x;
-	pas->y = d3.y - d2.y;
-	if (ft_abs(pas->x) > ft_abs(pas->y))
-	{
-		*nbpixels = ft_abs(pas->x);
-		pas->y /= ft_abs(pas->x);
-		pas->x /= ft_abs(pas->x);
-	}
-	else
-	{
-		*nbpixels = ft_abs(pas->y);
-		pas->x /= ft_abs(pas->y);
-		pas->y /= ft_abs(pas->y);
-	}
 }
-
-void	ft_put_par(t_window *win, t_par par, int color)
-{
-	t_dot		tmp;
-	t_vector	pas;
-	t_vector	line;
-	int			nbpixels;
-	int			i;
-
-	line.x = par.d1.x - par.d2.x;
-	line.y = par.d1.y - par.d2.y;
-	set_pas(par.d2, par.d3, &pas, &nbpixels);
-	i = -1;
-	while (i++ < nbpixels)
-	{
-		tmp.x = par.d2.x + line.x;
-		tmp.y = par.d2.y + line.y;
-		tmp.color = color;
-		par.d2.x += pas.x;
-		par.d2.y += pas.y;
-		par.d2.color = color;
-		ft_put_line(win, &(par.d2), &tmp);
-	}
-}*/

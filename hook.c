@@ -21,18 +21,12 @@ void	ft_refresh(t_window *win, t_image *image)
 	image->image_ptr = mlx_new_image(win->mlx, win->width, win->height);
 	image->image = (int *)mlx_get_data_addr(image->image_ptr,
 					&(image->bpp), &(image->s_l), &(image->endian));
-	
 	print_dots(win, win->inputs, win->map);
 	mlx_put_image_to_window(win->mlx, win->win, win->map->image->image_ptr, 0, 0);
-	//ft_print_bordure(win);
-	/*mlx_string_put(win->mlx, win->win, \
-	win->width / 2 - (10 * ft_strlen(win->name) / 2), \
-	win->height / 10 / 2 - 12, 0xBB0000, win->name);*/
 }
 
 int		key_hook(int keycode, t_window *win)
 {
-	//printf("Key : %i\n", keycode);
     if (keycode == 53)
 	{
 		ft_clear_memory(win, win->inputs);
@@ -53,7 +47,6 @@ int		key_hook(int keycode, t_window *win)
 
 int     mouse_hook(int button, int x, int y, t_window *win)
 {
-	//printf("Button : %i\n", button);
     if (button == 4)
 	win->map->zoom -= 0.06;
     else if (button == 5)

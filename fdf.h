@@ -58,19 +58,6 @@ typedef struct	s_vector
 	float	    y;
 }				t_vector;
 
-/*typedef struct	s_inputs
-{
-	int			fd;
-	char		*line;
-	char		**tabline;
-	int			*tmpcolors;
-	int			**colors;
-	int			*tmptab;
-	int			**tab;
-	int			*lenx;
-	int			leny;
-}				t_inputs;*/
-
 typedef struct	s_inputs
 {
 	int			fd;
@@ -117,14 +104,12 @@ void			reset_dots(t_window *win, t_inputs *inputs, t_map *map);
 void			print_dots(t_window *win, t_inputs *inputs, t_map *map);
 t_par			set_par(t_dot *d1, t_dot *d2, t_dot *d3, t_dot *d4);
 void			ft_put_line(t_window *window, t_dot *d1, t_dot *d2);
-void			ft_put_par(t_window *win, t_par par, int color);
-void			ft_print_bordure(t_window *win);
 int				key_hook(int keycode, t_window *win);
 int     		mouse_hook(int button, int x, int y, t_window *win);
 void			ft_parallele(t_window *win, int keycode);
 int				ft_clear_memory(t_window *win, t_inputs *inputs);
-int				set_dots(t_window *win, t_inputs *inputs, t_map *map);
 int				maping(t_window *win, int mincolor, int maxcolor, double prop);
 int				set_color(t_window *win, int z);
+int				colors(t_window *win, t_inputs *inputs, t_map *map);
 
 #endif

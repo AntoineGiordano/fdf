@@ -22,7 +22,7 @@ SRC =	fdf.c \
 OBJ = $(SRC:%.c=%.o)
 
 COMPIL = gcc
-FLAG = -Wall -Werror -Wextra -g
+FLAG = -Wall -Werror -Wextra -g -fsanitize=address -fno-omit-frame-pointer
 
 LIBFT = libft
 MLX = minilibx_macos

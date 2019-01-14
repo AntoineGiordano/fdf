@@ -6,7 +6,7 @@
 /*   By: agiordan <mwaterso@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/14 20:16:36 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2019/01/12 05:54:03 by agiordan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/01/07 14:30:52 by agiordan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -27,6 +27,5 @@ int		**ft_addinttab(int **tab, int *line, size_t length)
 		i++;
 	}
 	newtab[i] = line;
-	free(tab);
 	return (newtab);
 }

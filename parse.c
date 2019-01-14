@@ -12,7 +12,7 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-
+/*
 int		ft_params_2(t_window *win, int ac, char **av, int *i)
 {
 	if (!ft_strcmp(av[*i], "-name"))
@@ -63,10 +63,6 @@ int		ft_params(t_window *win, int ac, char **av)
 	//printf("fin params 1\n");
 	return (ifile);
 }
-/*
-min        current                max
-RGB1       color                  RGB2
-*/
 
 void	set_z(t_window *win, t_inputs *inputs, char *line, int j)
 {
@@ -83,7 +79,7 @@ void	set_z(t_window *win, t_inputs *inputs, char *line, int j)
 	//printf("Fin set z\n");
 }
 
-int		ft_parse_2(t_window *win, t_inputs *inputs, int *count, int *nline)
+int		parse_2(t_window *win, t_inputs *inputs, int *count, int *nline)
 {
 	char	*line;
 	int		j;
@@ -108,12 +104,13 @@ int		ft_parse_2(t_window *win, t_inputs *inputs, int *count, int *nline)
 	return (0);
 }
 
-int		ft_parse(t_window *win, t_inputs *inputs, char *file)
+int		parse(t_window *win, t_inputs *inputs, char *file)
 {
 	//gnl - split - nb de cases - malloc tabint - convertir char/int - addinttab -
 	int		count;
 	int		ret;
 	int		nline;
+	int tab;//
 
 	if ((inputs->fd = open(file, O_RDONLY)) == -1)
 		return (1);
@@ -126,7 +123,7 @@ int		ft_parse(t_window *win, t_inputs *inputs, char *file)
 	ret = 1;
 	while ((ret = get_next_line(inputs->fd, &(inputs->line))) == 1)
 	{
-		if (ft_parse_2(win, inputs, &count, &nline))
+		if (parse_2(win, inputs, &count, &nline))
 			return (1);
 		free(inputs->line);
 		nline++;
@@ -134,4 +131,4 @@ int		ft_parse(t_window *win, t_inputs *inputs, char *file)
 	inputs->lenx = count;
 	inputs->leny = nline;
 	return (0);
-}
+}*/

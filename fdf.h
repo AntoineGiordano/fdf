@@ -58,7 +58,7 @@ typedef struct	s_vector
 	float	    y;
 }				t_vector;
 
-typedef struct	s_inputs
+/*typedef struct	s_inputs
 {
 	int			fd;
 	char		*line;
@@ -67,7 +67,16 @@ typedef struct	s_inputs
 	int			**colors;
 	int			*tmptab;
 	int			**tab;
-	int			lenx;
+	int			*lenx;
+	int			leny;
+}				t_inputs;*/
+
+typedef struct	s_inputs
+{
+	int			fd;
+	char		*line;
+	int			**tab;
+	int			*lenx;
 	int			leny;
 }				t_inputs;
 
@@ -99,8 +108,9 @@ typedef struct	s_window
 	t_inputs	*inputs;
 }				t_window;
 
-int				ft_params(t_window *win, int ac, char **av);
-int				ft_parse(t_window *win, t_inputs *inputs, char *file);
+int				params(t_window *win, int ac, char **av);
+int				ft_init_tabs(t_window *win, t_inputs *inputs, t_map *map);
+int				parse(t_window *win, t_inputs *inputs, char *file);
 void			ft_refresh(t_window *win, t_image *image);
 int				set_dots(t_window *win, t_inputs *inputs, t_map *map);
 void			reset_dots(t_window *win, t_inputs *inputs, t_map *map);
@@ -115,5 +125,6 @@ void			ft_parallele(t_window *win, int keycode);
 int				ft_clear_memory(t_window *win, t_inputs *inputs);
 int				set_dots(t_window *win, t_inputs *inputs, t_map *map);
 int				maping(t_window *win, int mincolor, int maxcolor, double prop);
+int				set_color(t_window *win, int z);
 
 #endif

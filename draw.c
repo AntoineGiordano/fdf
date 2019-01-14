@@ -65,17 +65,11 @@ int		set_dots(t_window *win, t_inputs *inputs, t_map *map)
 	while (++i < inputs->leny)
 	{
 		j = -1;
-		while (++j < inputs->lenx)
+		while (++j < inputs->lenx[i])
 		{
 			map->tabdot[i][j]->x = map->zoom * (map->i.x * (j - map->centre.x) + map->j.x * (i - map->centre.y) + map->k.x * inputs->tab[i][j]) + map->origin.x;
-			map->tabdot[i][j]->y = map->zoom * (map->i.y * (j - map->centre.x) + map->j.y * (i - map->centre.y) + map->k.y * inputs->tab[i][j]) + map->origin.y;
-			if (win->colorparam)
-			{
-				map->tabdot[i][j]->color = set_color(win, inputs->tab[i][j]);
-				//printf("Color : %#x\n", map->tabdot[i][j]->color);
-			}
-			else
-				map->tabdot[i][j]->color = inputs->colors[i][j];
+			map->tabdot[i][j]->y = map->zoom * (map->i.y * (j - map->centre.x) + map->j.y * (i - map->centre.y) + map->k.y * inputs->tab[i][j]) + map->origin.y;		
+			//printf("Color : %i\n", map->tabdot[i][j]->color);
 		}	
 	}
 	//printf("Max : %#x\nMin : %#x\n", win->maxcolor, win->mincolor);
@@ -97,13 +91,13 @@ void	print_dots(t_window *win, t_inputs *inputs, t_map *map)
 	while (++i < inputs->leny)
 	{
 		j = -1;
-		while (++j < inputs->lenx)
+		while (++j < inputs->lenx[i])
 		{
 			//printf(".\n");
 			//printf("x = %f\t-\ty = %f\n", map->tabdot[i][j]->x, map->tabdot[i][j]->y);
 			x = map->tabdot[i][j]->x;
 			y = map->tabdot[i][j]->y;
-			if (j + 1 != inputs->lenx)
+			if (j + 1 != inputs->lenx[i])
 			{
 				if (!((x < 0 || x > win->width || y < 0 || y > win->height) &&
 				(map->tabdot[i][j + 1]->x < 0 ||
@@ -112,7 +106,7 @@ void	print_dots(t_window *win, t_inputs *inputs, t_map *map)
 				map->tabdot[i][j + 1]->y > win->height)))
 				ft_put_line(win, map->tabdot[i][j], map->tabdot[i][j + 1]);
 			}
-			if (i + 1 != inputs->leny)
+			if (i + 1 != inputs->leny && j < inputs->lenx[i + 1])
 			{
 				if (!((x < 0 || x > win->width || y < 0 || y > win->height) &&
 				(map->tabdot[i + 1][j]->x < 0 ||
@@ -121,6 +115,24 @@ void	print_dots(t_window *win, t_inputs *inputs, t_map *map)
 				map->tabdot[i + 1][j]->y > win->height)))
 				ft_put_line(win, map->tabdot[i][j], map->tabdot[i + 1][j]);
 			}
+			/*if (j + 1 != inputs->lenx[i] && i + 1 != inputs->leny)
+			{
+				if (!((x < 0 || x > win->width || y < 0 || y > win->height) &&
+				(map->tabdot[i + 1][j + 1]->x < 0 ||
+				map->tabdot[i + 1][j + 1]->x > win->width ||
+				map->tabdot[i + 1][j + 1]->y < 0 ||
+				map->tabdot[i + 1][j + 1]->y > win->height)))
+				ft_put_line(win, map->tabdot[i][j], map->tabdot[i + 1][j + 1]);
+			}
+			if (i - 1 != -1 && j + 1 != inputs->lenx[i])
+			{
+				if (!((x < 0 || x > win->width || y < 0 || y > win->height) &&
+				(map->tabdot[i - 1][j + 1]->x < 0 ||
+				map->tabdot[i - 1][j + 1]->x > win->width ||
+				map->tabdot[i - 1][j + 1]->y < 0 ||
+				map->tabdot[i - 1][j + 1]->y > win->height)))
+				ft_put_line(win, map->tabdot[i][j], map->tabdot[i - 1][j + 1]);
+			}*/
 		}
 	}
 	//printf("Fin print dot\n");
@@ -165,13 +177,4 @@ t_par	set_par(t_dot *d1, t_dot *d2, t_dot *d3, t_dot *d4)
 	return (par);
 }*/
 
-/*printf("Fin malloc 3 :\n");
-			printf("%f\n", map->zoom);
-			printf("%f\n", map->i.x);
-			printf("%f\n", map->centre.x);
-			printf("%f\n", map->j.x);
-			printf("%f\n", map->centre.y);
-			printf("%f\n", map->k.x);
-			printf("%f\n", map->origin.x);
-			printf("%f\n", inputs->tab[i][j]);*/
-			//ne pas prendre les maps invalide ou si on passe un binaire ou un dossier (avec char in center, maps no rectangles, checks char invalide)
+//ne pas prendre les maps invalide ou si on passe un binaire ou un dossier (avec char in center, maps no rectangles, checks char invalide)

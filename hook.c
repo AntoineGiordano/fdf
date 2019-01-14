@@ -39,13 +39,13 @@ int		key_hook(int keycode, t_window *win)
 		exit(EXIT_SUCCESS);
 	}
 	else if (keycode == 124)
-		win->map->origin.x -= 15;
-	else if (keycode == 123)
 		win->map->origin.x += 15;
+	else if (keycode == 123)
+		win->map->origin.x -= 15;
 	else if (keycode == 125)
-		win->map->origin.y -= 15;
-    else if (keycode == 126)
 		win->map->origin.y += 15;
+    else if (keycode == 126)
+		win->map->origin.y -= 15;
 	ft_parallele(win, keycode);
 	ft_refresh(win, win->map->image);
 	return (0);

@@ -76,35 +76,45 @@ int		set_size(t_window *win, t_inputs *inputs, char *file)
 	nline = 0;
 	while ((ret = get_next_line(fd, &line)) == 1)
 	{
-		if (ret == -1)
-			return (1);
 		inputs->lenx = ft_addint(inputs->lenx,
 		ft_tablen(tab = ft_strsplit(line, ' ')), nline++);
 		ft_tabdel(&tab);
 		ft_strdel(&line);
 	}
+	if (ret == -1)
+		return (1);
 	ft_strdel(&line);
 	inputs->leny = nline;
 	close(fd);
 	return (0);
 }
 
-int		parse_2(t_window *win, char **tab, int nline, int j)
+int		parse_2(t_window *win, t_inputs *inputs, int nline)
 {
-	if (!ft_isdigit(tab[j][0]) && tab[j][0] != '-' && tab[j][0] != '+')
-		return (1);
-	win->inputs->tab[nline][j] = ft_atoi(tab[j]);
-	if (win->inputs->tab[nline][j] > win->map->maxz)
-		win->map->maxz = win->inputs->tab[nline][j];
-	else if (win->inputs->tab[nline][j] < win->map->minz)
-		win->map->minz = win->inputs->tab[nline][j];
-	if (!(win->colorparam))
+	char	**tab;
+	int		j;
+
+	tab = ft_strsplit(inputs->line, ' ');
+	j = -1;
+	while (++j < inputs->lenx[nline])
 	{
-		win->map->tabdot[nline][j]->color = 16777215;
-		if (ft_strstr(tab[j], ",0x"))
-			win->map->tabdot[nline][j]->color =
-			ft_atoi_base(ft_strstr(tab[j], ",0x") + 3, 16);
+		if (!ft_isdigit(tab[j][0]) && tab[j][0] != '-' && tab[j][0] != '+')
+			return (1);
+		win->inputs->tab[nline][j] = ft_atoi(tab[j]);
+		if (win->inputs->tab[nline][j] > win->map->maxz)
+			win->map->maxz = win->inputs->tab[nline][j];
+		else if (win->inputs->tab[nline][j] < win->map->minz)
+			win->map->minz = win->inputs->tab[nline][j];
+		if (!(win->colorparam))
+		{
+			win->map->tabdot[nline][j]->color = 16777215;
+			if (ft_strstr(tab[j], ",0x"))
+				win->map->tabdot[nline][j]->color =
+				ft_atoi_base(ft_strstr(tab[j], ",0x") + 3, 16);
+		}
 	}
+	ft_tabdel(&tab);
+	ft_strdel(&(inputs->line));
 	return (0);
 }
 
@@ -112,7 +122,7 @@ int		parse(t_window *win, t_inputs *inputs, char *file)
 {
 	int		ret;
 	int		nline;
-	int		j;
+	int		i;
 	char	**tab;
 
 	if (set_size(win, inputs, file) || ft_init_tabs(win, inputs, win->map))
@@ -122,16 +132,15 @@ int		parse(t_window *win, t_inputs *inputs, char *file)
 	nline = 0;
 	while ((ret = get_next_line(inputs->fd, &(inputs->line)) == 1))
 	{
-		if (ret == -1)
-			return (1);
-		tab = ft_strsplit(inputs->line, ' ');
-		j = -1;
-		while (++j < inputs->lenx[nline])
-			parse_2(win, tab, nline, j);
-		ft_tabdel(&tab);
-		ft_strdel(&(inputs->line));
-		nline++;
+		i = -1;
+		while (++i < inputs->lenx[nline])
+			if (!ft_isalnum(inputs->line[i]) && !ft_isspace(inputs->line[i]) &&
+			inputs->line[i] != ',')
+				return (1);
+		parse_2(win, inputs, nline++);
 	}
+	if (ret == -1)
+		return (1);
 	colors(win, inputs, win->map);
 	close(inputs->fd);
 	return (0);

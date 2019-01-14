@@ -6,7 +6,7 @@
 /*   By: agiordan <agiordan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/03 17:31:57 by agiordan     #+#   ##    ##    #+#       */
-/*   Updated: 2019/01/14 05:38:24 by agiordan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/01/14 08:04:22 by agiordan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -113,5 +113,6 @@ char				**ft_tabdup(char **tab);
 void				ft_tabintdel(int **tab);
 void				ft_tabint2del(int ***tab, size_t len);
 double				ft_abs(double x);
+int					ft_isspace(int c);
 
 #endif

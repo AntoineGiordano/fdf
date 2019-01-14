@@ -21,6 +21,7 @@
 **		-	Nom fenetre
 **		-   palette couleur
 **	Centres
+**	Fichier difforme
 */
 
 #include "fdf.h"
@@ -44,7 +45,10 @@ int		ft_clear_memory(t_window *win, t_inputs *inputs)
 	if (win->win)
 		mlx_destroy_window(win->mlx, win->win);
 	else
-		ft_putstr("usage: [-name <name>] | [-len <width> <height>] file\n");
+	{
+		ft_putstr("usage: [-name <name>] | [-len <width> <height>] | ");
+		ft_putstr("[-color <min_color> <max_color>] file\n");
+	}
 	if (win->map->image->image_ptr)
 		mlx_destroy_image(win->mlx, win->map->image->image_ptr);
 	reset_dots(win, win->inputs, win->map);

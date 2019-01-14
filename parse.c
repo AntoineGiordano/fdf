@@ -12,8 +12,8 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-/*
-int		ft_params_2(t_window *win, int ac, char **av, int *i)
+
+int		flags(t_window *win, int ac, char **av, int *i)
 {
 	if (!ft_strcmp(av[*i], "-name"))
 	{
@@ -34,101 +34,105 @@ int		ft_params_2(t_window *win, int ac, char **av, int *i)
 			win->mincolor = ft_atoi_base(av[++(*i)], 16);
 		if (*i + 1 < ac)
 			win->maxcolor = ft_atoi_base(av[++(*i)], 16);
-		printf("Min : %i\nMax : %i\n", win->mincolor, win->maxcolor);
 	}
 	else
 		return (1);
 	return (0);
 }
 
-int		ft_params(t_window *win, int ac, char **av)
+int		params(t_window *win, int ac, char **av)
 {
-	int			i;
-	int			ifile;
+	int	i;
+	int	ifile;
 
 	i = 1;
 	ifile = -1;
 	win->colorparam = 0;
-	win->name = ft_strdup("Fdf");
+	win->name = "Fdf";
 	win->width = 1000;
 	win->height = 1000;
 	win->maxcolor = 0x50BB50;
 	win->mincolor = 0xFFFFFF;
 	while (i < ac)
 	{
-		if (ft_params_2(win, ac, av, &i))
+		if (flags(win, ac, av, &i))
 			ifile = i;
 		i++;
 	}
-	//printf("fin params 1\n");
 	return (ifile);
 }
 
-void	set_z(t_window *win, t_inputs *inputs, char *line, int j)
-{
-	//printf("Debut set z\n");
-	line = inputs->tabline[j];
-	inputs->tmptab[j] = ft_atoi(line);
-	if (inputs->tmptab[j] > win->map->maxz)
-		win->map->maxz = inputs->tmptab[j];
-	if (inputs->tmptab[j] < win->map->minz)
-		win->map->minz = inputs->tmptab[j];
-	if ((!(win->colorparam) && (ft_strlen(line) != ft_nbrlen(ft_atoi(line)))) ||
-	((ft_strlen(line) != ft_nbrlen(ft_atoi(line)) + 1) && line[0] == '-'))
-		inputs->tmpcolors[j] = ft_atoi_base(ft_strsub(line, ft_nbrlen(ft_atoi(line)) + 3, ft_strlen(line) - ft_nbrlen(ft_atoi(line)) - 3), 16);
-	//printf("Fin set z\n");
-}
-
-int		parse_2(t_window *win, t_inputs *inputs, int *count, int *nline)
+int		set_size(t_window *win, t_inputs *inputs, char *file)
 {
 	char	*line;
-	int		j;
+	char	**tab;
+	int		nline;
+	int		fd;
+	int		ret;
 
-	inputs->tabline = ft_strsplit(inputs->line, ' ');
-	*count = ft_tablen(inputs->tabline);
-	if (!(inputs->tmptab = (int *)malloc(sizeof(int) * *count)))
+	if ((fd = open(file, O_RDONLY)) == -1)
 		return (1);
-	if (!(inputs->tmpcolors = (int *)malloc(sizeof(int) * *count)))
-		return (1);
-	ft_filltabint(&(inputs->tmpcolors), *count, ft_atoi_base("FFFFFF", 16));
-	j = -1;
-	while (++j < *count)
+	inputs->lenx = NULL;
+	nline = 0;
+	while ((ret = get_next_line(fd, &line)) == 1)
 	{
-		//printf("Nb : %s\n", inputs->tabline[j]);
-		set_z(win, inputs, line, j);
+		if (ret == -1)
+			return (1);
+		inputs->lenx = ft_addint(inputs->lenx,
+		ft_tablen(tab = ft_strsplit(line, ' ')), nline++);
+		ft_tabdel(&tab);
+		ft_strdel(&line);
 	}
-	inputs->tab = ft_addinttab(inputs->tab, inputs->tmptab, *nline);
-	inputs->colors = ft_addinttab(inputs->colors, inputs->tmpcolors, *nline);
-	free(inputs->tabline);
-	//printf("Fin sous parse\n");
+	ft_strdel(&line);
+	inputs->leny = nline;
+	close(fd);
+	return (0);
+}
+
+int		parse_2(t_window *win, char **tab, int nline, int j)
+{
+	if (!ft_isdigit(tab[j][0]) && tab[j][0] != '-' && tab[j][0] != '+')
+		return (1);
+	win->inputs->tab[nline][j] = ft_atoi(tab[j]);
+	if (win->inputs->tab[nline][j] > win->map->maxz)
+		win->map->maxz = win->inputs->tab[nline][j];
+	else if (win->inputs->tab[nline][j] < win->map->minz)
+		win->map->minz = win->inputs->tab[nline][j];
+	if (!(win->colorparam))
+	{
+		win->map->tabdot[nline][j]->color = 16777215;
+		if (ft_strstr(tab[j], ",0x"))
+			win->map->tabdot[nline][j]->color =
+			ft_atoi_base(ft_strstr(tab[j], ",0x") + 3, 16);
+	}
 	return (0);
 }
 
 int		parse(t_window *win, t_inputs *inputs, char *file)
 {
-	//gnl - split - nb de cases - malloc tabint - convertir char/int - addinttab -
-	int		count;
 	int		ret;
 	int		nline;
-	int tab;//
+	int		j;
+	char	**tab;
 
+	if (set_size(win, inputs, file) || ft_init_tabs(win, inputs, win->map))
+		return (1);
 	if ((inputs->fd = open(file, O_RDONLY)) == -1)
 		return (1);
-	if (!(inputs->tab = (int **)malloc(sizeof(int *))))
-		return (1);
-	if (!(inputs->colors = (int **)malloc(sizeof(int **))))
-		return (1);
-	printf("Fin malloc tab & line\n");
 	nline = 0;
-	ret = 1;
-	while ((ret = get_next_line(inputs->fd, &(inputs->line))) == 1)
+	while ((ret = get_next_line(inputs->fd, &(inputs->line)) == 1))
 	{
-		if (parse_2(win, inputs, &count, &nline))
+		if (ret == -1)
 			return (1);
-		free(inputs->line);
+		tab = ft_strsplit(inputs->line, ' ');
+		j = -1;
+		while (++j < inputs->lenx[nline])
+			parse_2(win, tab, nline, j);
+		ft_tabdel(&tab);
+		ft_strdel(&(inputs->line));
 		nline++;
 	}
-	inputs->lenx = count;
-	inputs->leny = nline;
+	colors(win, inputs, win->map);
+	close(inputs->fd);
 	return (0);
-}*/
+}

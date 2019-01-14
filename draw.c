@@ -33,10 +33,10 @@ void	reset_dots(t_window *win, t_inputs *inputs, t_map *map)
 	}
 }
 
-int		set_dots(t_window *win, t_inputs *inputs, t_map *map)
+void	set_dots(t_window *win, t_inputs *inputs, t_map *map)
 {
-	int		i;
-	int		j;
+	int	j;
+	int	i;
 
 	i = -1;
 	while (++i < inputs->leny)
@@ -50,15 +50,38 @@ int		set_dots(t_window *win, t_inputs *inputs, t_map *map)
 			map->tabdot[i][j]->y = map->zoom * (map->i.y * (j - map->centre.x) +
 				map->j.y * (i - map->centre.y) + map->k.y * inputs->tab[i][j]) +
 				map->origin.y;
-		}	
+		}
 	}
-	return (0);
+}
+
+void	print_links(t_window *win, t_dot *dot, int i, int j)
+{
+	if (j + 1 != win->inputs->lenx[i])
+	{
+		if (!((dot->x < 0 || dot->x > win->width ||
+				dot->y < 0 || dot->y > win->height) &&
+		(win->map->tabdot[i][j + 1]->x < 0 ||
+		win->map->tabdot[i][j + 1]->x > win->width ||
+		win->map->tabdot[i][j + 1]->y < 0 ||
+		win->map->tabdot[i][j + 1]->y > win->height)))
+			ft_put_line(win, win->map->tabdot[i][j],
+								win->map->tabdot[i][j + 1]);
+	}
+	if (i + 1 != win->inputs->leny && j < win->inputs->lenx[i + 1])
+	{
+		if (!((dot->x < 0 || dot->x > win->width ||
+			dot->y < 0 || dot->y > win->height) &&
+		(win->map->tabdot[i + 1][j]->x < 0 ||
+		win->map->tabdot[i + 1][j]->x > win->width ||
+		win->map->tabdot[i + 1][j]->y < 0 ||
+		win->map->tabdot[i + 1][j]->y > win->height)))
+			ft_put_line(win, win->map->tabdot[i][j],
+								win->map->tabdot[i + 1][j]);
+	}
 }
 
 void	print_dots(t_window *win, t_inputs *inputs, t_map *map)
 {
-	int	x;
-	int	y;
 	int	j;
 	int	i;
 
@@ -67,45 +90,6 @@ void	print_dots(t_window *win, t_inputs *inputs, t_map *map)
 	{
 		j = -1;
 		while (++j < inputs->lenx[i])
-		{
-			x = map->tabdot[i][j]->x;
-			y = map->tabdot[i][j]->y;
-			if (j + 1 != inputs->lenx[i])
-			{
-				if (!((x < 0 || x > win->width || y < 0 || y > win->height) &&
-				(map->tabdot[i][j + 1]->x < 0 ||
-				map->tabdot[i][j + 1]->x > win->width ||
-				map->tabdot[i][j + 1]->y < 0 ||
-				map->tabdot[i][j + 1]->y > win->height)))
-				ft_put_line(win, map->tabdot[i][j], map->tabdot[i][j + 1]);
-			}
-			if (i + 1 != inputs->leny && j < inputs->lenx[i + 1])
-			{
-				if (!((x < 0 || x > win->width || y < 0 || y > win->height) &&
-				(map->tabdot[i + 1][j]->x < 0 ||
-				map->tabdot[i + 1][j]->x > win->width ||
-				map->tabdot[i + 1][j]->y < 0 ||
-				map->tabdot[i + 1][j]->y > win->height)))
-				ft_put_line(win, map->tabdot[i][j], map->tabdot[i + 1][j]);
-			}
-			/*if (j + 1 != inputs->lenx[i + 1] && i + 1 != inputs->leny)
-			{
-				if (!((x < 0 || x > win->width || y < 0 || y > win->height) &&
-				(map->tabdot[i + 1][j + 1]->x < 0 ||
-				map->tabdot[i + 1][j + 1]->x > win->width ||
-				map->tabdot[i + 1][j + 1]->y < 0 ||
-				map->tabdot[i + 1][j + 1]->y > win->height)))
-				ft_put_line(win, map->tabdot[i][j], map->tabdot[i + 1][j + 1]);
-			}
-			if (i - 1 != -1 && j + 1 != inputs->lenx[i - 1])
-			{
-				if (!((x < 0 || x > win->width || y < 0 || y > win->height) &&
-				(map->tabdot[i - 1][j + 1]->x < 0 ||
-				map->tabdot[i - 1][j + 1]->x > win->width ||
-				map->tabdot[i - 1][j + 1]->y < 0 ||
-				map->tabdot[i - 1][j + 1]->y > win->height)))
-				ft_put_line(win, map->tabdot[i][j], map->tabdot[i - 1][j + 1]);
-			}*/
-		}
+			print_links(win, map->tabdot[i][j], i, j);
 	}
 }

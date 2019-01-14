@@ -22,12 +22,13 @@ void	ft_refresh(t_window *win, t_image *image)
 	image->image = (int *)mlx_get_data_addr(image->image_ptr,
 					&(image->bpp), &(image->s_l), &(image->endian));
 	print_dots(win, win->inputs, win->map);
-	mlx_put_image_to_window(win->mlx, win->win, win->map->image->image_ptr, 0, 0);
+	mlx_put_image_to_window(win->mlx, win->win,
+	win->map->image->image_ptr, 0, 0);
 }
 
 int		key_hook(int keycode, t_window *win)
 {
-    if (keycode == 53)
+	if (keycode == 53)
 	{
 		ft_clear_memory(win, win->inputs);
 		exit(EXIT_SUCCESS);
@@ -38,23 +39,22 @@ int		key_hook(int keycode, t_window *win)
 		win->map->origin.x -= 15;
 	else if (keycode == 125)
 		win->map->origin.y += 15;
-    else if (keycode == 126)
+	else if (keycode == 126)
 		win->map->origin.y -= 15;
 	ft_parallele(win, keycode);
 	ft_refresh(win, win->map->image);
 	return (0);
 }
 
-int     mouse_hook(int button, int x, int y, t_window *win)
+int		mouse_hook(int button, int x, int y, t_window *win)
 {
-    if (button == 4)
-	win->map->zoom -= 0.06;
-    else if (button == 5)
-        win->map->zoom += 0.06;
+	if (button == 4)
+		win->map->zoom -= 0.06;
+	else if (button == 5)
+		win->map->zoom += 0.06;
 	if (win->map->zoom < 0)
 		win->map->zoom = 0;
 	if (button == 4 || button == 5)
 		ft_refresh(win, win->map->image);
 	return (0);
 }
-

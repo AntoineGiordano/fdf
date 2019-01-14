@@ -11,6 +11,18 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
+/*
+**	Couleur fichier
+**	Palette couleur en parametres
+**	Zoom
+**	Translation fleches
+**	Options
+**		-	Taille fenetre
+**		-	Nom fenetre
+**		-   palette couleur
+**	Centres
+*/
+
 #include "fdf.h"
 
 void	ft_set_null(t_window *win, t_inputs *inputs, t_image *image)
@@ -27,7 +39,7 @@ void	ft_set_null(t_window *win, t_inputs *inputs, t_image *image)
 
 int		ft_clear_memory(t_window *win, t_inputs *inputs)
 {
-    int	i;
+	int	i;
 
 	if (win->win)
 		mlx_destroy_window(win->mlx, win->win);
@@ -36,6 +48,7 @@ int		ft_clear_memory(t_window *win, t_inputs *inputs)
 	if (win->map->image->image_ptr)
 		mlx_destroy_image(win->mlx, win->map->image->image_ptr);
 	reset_dots(win, win->inputs, win->map);
+	ft_strdel(&(inputs->line));
 	if (inputs->tab)
 	{
 		i = -1;
@@ -58,7 +71,7 @@ int		ft_init_tabs(t_window *win, t_inputs *inputs, t_map *map)
 	map->tabdot[inputs->leny] = NULL;
 	i = -1;
 	while (++i < inputs->leny)
-	{  
+	{
 		if (!(map->tabdot[i] = (t_dot **)malloc(sizeof(t_dot *) *
 		(inputs->lenx[i] + 1))))
 			return (1);
@@ -109,23 +122,13 @@ int		main(int ac, char **av)
 	ft_set_null(&win, &inputs, &image);
 	if ((ifile = params(&win, ac, av)) == -1)
 		return (ft_clear_memory(&win, &inputs));
-    if (parse(&win, &inputs, av[ifile]))
-        return (ft_clear_memory(&win, &inputs));
-    if (ft_init(&win, win.inputs, win.map, win.map->image))
-        return (ft_clear_memory(&win, &inputs));
-    ft_refresh(&win, win.map->image);
-    mlx_mouse_hook(win.win, mouse_hook, &win);
-    mlx_key_hook(win.win, key_hook, &win);
-    mlx_loop(win.mlx);
-    return (0);
+	if (parse(&win, &inputs, av[ifile]))
+		return (ft_clear_memory(&win, &inputs));
+	if (ft_init(&win, win.inputs, win.map, win.map->image))
+		return (ft_clear_memory(&win, &inputs));
+	ft_refresh(&win, win.map->image);
+	mlx_mouse_hook(win.win, mouse_hook, &win);
+	mlx_key_hook(win.win, key_hook, &win);
+	mlx_loop(win.mlx);
+	return (0);
 }
-
-//Couleur fichier
-//Palette couleur en parametres
-//Zoom
-//Translation fleches
-//Options
-//	-	Taille fenetre
-//	-	Nom fenetre
-//  -   palette couleur
-//Centres

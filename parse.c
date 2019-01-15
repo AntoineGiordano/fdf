@@ -64,28 +64,24 @@ int		params(t_window *win, int ac, char **av)
 
 int		set_size(t_window *win, t_inputs *inputs, char *file)
 {
-	char	*line;
 	char	**tab;
 	int		nline;
-	int		fd;
-	int		ret;
 
-	if ((fd = open(file, O_RDONLY)) == -1)
+	if ((inputs->fd = open(file, O_RDONLY)) == -1)
 		return (1);
 	inputs->lenx = NULL;
 	nline = 0;
-	while ((ret = get_next_line(fd, &line)) == 1)
+	while ((inputs->ret = get_next_line(inputs->fd, &(inputs->line))) == 1)
 	{
 		inputs->lenx = ft_addint(inputs->lenx,
-		ft_tablen(tab = ft_strsplit(line, ' ')), nline++);
+		ft_tablen(tab = ft_strsplit(inputs->line, ' ')), nline++);
 		ft_tabdel(&tab);
-		ft_strdel(&line);
+		ft_strdel(&(inputs->line));
 	}
-	if (ret == -1)
+	if (inputs->ret == -1)
 		return (1);
-	ft_strdel(&line);
+	ft_strdel(&(inputs->line));
 	inputs->leny = nline;
-	close(fd);
 	return (0);
 }
 
@@ -98,8 +94,6 @@ int		parse_2(t_window *win, t_inputs *inputs, int nline)
 	j = -1;
 	while (++j < inputs->lenx[nline])
 	{
-		if (!ft_isdigit(tab[j][0]) && tab[j][0] != '-' && tab[j][0] != '+')
-			return (1);
 		win->inputs->tab[nline][j] = ft_atoi(tab[j]);
 		if (win->inputs->tab[nline][j] > win->map->maxz)
 			win->map->maxz = win->inputs->tab[nline][j];
@@ -120,28 +114,29 @@ int		parse_2(t_window *win, t_inputs *inputs, int nline)
 
 int		parse(t_window *win, t_inputs *inputs, char *file)
 {
-	int		ret;
 	int		nline;
 	int		i;
+	int		fd;
 	char	**tab;
 
 	if (set_size(win, inputs, file) || ft_init_tabs(win, inputs, win->map))
 		return (1);
-	if ((inputs->fd = open(file, O_RDONLY)) == -1)
+	if ((fd = open(file, O_RDONLY)) == -1)
 		return (1);
 	nline = 0;
-	while ((ret = get_next_line(inputs->fd, &(inputs->line)) == 1))
+	while ((inputs->ret = get_next_line(fd, &(inputs->line)) == 1))
 	{
 		i = -1;
 		while (++i < inputs->lenx[nline])
 			if (!ft_isalnum(inputs->line[i]) && !ft_isspace(inputs->line[i]) &&
-			inputs->line[i] != ',')
+			inputs->line[i] != ',' && inputs->line[i] != '-' &&
+			inputs->line[i] != '+')
 				return (1);
 		parse_2(win, inputs, nline++);
 	}
-	if (ret == -1)
+	if (inputs->ret == -1)
 		return (1);
 	colors(win, inputs, win->map);
-	close(inputs->fd);
+	close(fd);
 	return (0);
 }

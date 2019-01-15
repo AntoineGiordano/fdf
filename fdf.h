@@ -61,6 +61,7 @@ typedef struct	s_vector
 typedef struct	s_inputs
 {
 	int			fd;
+	int			ret;
 	char		*line;
 	int			**tab;
 	int			*lenx;

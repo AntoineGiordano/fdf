@@ -52,13 +52,15 @@ int		ft_clear_memory(t_window *win, t_inputs *inputs)
 	if (win->map->image->image_ptr)
 		mlx_destroy_image(win->mlx, win->map->image->image_ptr);
 	reset_dots(win, win->inputs, win->map);
-	ft_strdel(&(inputs->line));
+	if (inputs->line)
+		ft_strdel(&(inputs->line));
 	if (inputs->tab)
 	{
 		i = -1;
 		while (++i < inputs->leny)
 			ft_tabintdel(&(inputs->tab[i]));
 	}
+	close(inputs->fd);
 	return (0);
 }
 
